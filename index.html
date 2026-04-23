@@ -992,31 +992,51 @@
 
     const targetSection = parentView.id === 'view-changelog' ? 'changelog' : 'tutoriales';
     const currentlyActive = document.querySelector('.view.active');
+    const needsViewSwitch = !currentlyActive || currentlyActive.id !== parentView.id;
 
-    // Switch views if needed
-    if (!currentlyActive || currentlyActive.id !== parentView.id) {
-      switchToSection(targetSection);
+    // If we need to switch views, do it WITHOUT the scroll-to-top (which would fight our scroll-to-target)
+    if (needsViewSwitch) {
+      document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+      parentView.classList.add('active');
+
+      // Sync mobile tabs
+      document.querySelectorAll('.mobile-tab').forEach(t => t.classList.remove('active'));
+      const mobileTab = document.querySelector('.mobile-tab[data-section="' + targetSection + '"]');
+      if (mobileTab) mobileTab.classList.add('active');
+
+      // Sync sidebar section headers + open state
+      document.querySelectorAll('.nav-section-header').forEach(h => h.classList.remove('active'));
+      document.querySelectorAll('.nav-section').forEach(s => s.classList.remove('open'));
+      const sidebarId = targetSection === 'tutoriales' ? 'section-tutoriales' : 'section-changelog';
+      const sidebarSection = document.getElementById(sidebarId);
+      if (sidebarSection) {
+        sidebarSection.classList.add('open');
+        sidebarSection.querySelector('.nav-section-header').classList.add('active');
+      }
     }
 
-    // Scroll to the target after the view is visible
-    setTimeout(() => {
-      target.scrollIntoView({ behavior: 'smooth', block: 'start' });
-      // Also highlight the sidebar item if it's a release
-      const navItem = document.querySelector('[href="' + hash + '"]');
-      if (navItem) {
-        if (navItem.classList.contains('nav-release-item')) {
-          setReleaseActive(navItem);
-          const parentMonth = navItem.closest('.nav-month');
-          if (parentMonth) parentMonth.classList.add('open');
-        } else if (navItem.classList.contains('nav-item')) {
-          setTutorialActive(navItem);
-        }
+    // Highlight sidebar item + auto-expand month if needed
+    const navItem = document.querySelector('[href="' + hash + '"]');
+    if (navItem) {
+      if (navItem.classList.contains('nav-release-item')) {
+        setReleaseActive(navItem);
+        const parentMonth = navItem.closest('.nav-month');
+        if (parentMonth) parentMonth.classList.add('open');
+      } else if (navItem.classList.contains('nav-item')) {
+        setTutorialActive(navItem);
       }
-    }, 50);
+    }
+
+    // Jump instantly to the target (no smooth animation — user is arriving, not scrolling)
+    target.scrollIntoView({ behavior: 'auto', block: 'start' });
   }
 
-  // Run on page load and whenever the hash changes
-  window.addEventListener('load', handleHash);
+  // Run as soon as the DOM is ready (don't wait for YouTube iframes to load)
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', handleHash);
+  } else {
+    handleHash();
+  }
   window.addEventListener('hashchange', handleHash);
 </script>
 
