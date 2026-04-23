@@ -975,6 +975,49 @@
     document.body.classList.remove('printing-single');
     document.getElementById(id).classList.remove('print-target');
   }
+
+  // ── DEEP LINKING ──
+  // Handle URL hashes like #mar20-2026 that live inside the changelog view.
+  // Without this, the browser can't scroll to elements inside display:none views.
+  function handleHash() {
+    const hash = window.location.hash;
+    if (!hash || hash.length < 2) return;
+
+    const target = document.getElementById(hash.slice(1));
+    if (!target) return;
+
+    // Find which view this element belongs to
+    const parentView = target.closest('.view');
+    if (!parentView) return;
+
+    const targetSection = parentView.id === 'view-changelog' ? 'changelog' : 'tutoriales';
+    const currentlyActive = document.querySelector('.view.active');
+
+    // Switch views if needed
+    if (!currentlyActive || currentlyActive.id !== parentView.id) {
+      switchToSection(targetSection);
+    }
+
+    // Scroll to the target after the view is visible
+    setTimeout(() => {
+      target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      // Also highlight the sidebar item if it's a release
+      const navItem = document.querySelector('[href="' + hash + '"]');
+      if (navItem) {
+        if (navItem.classList.contains('nav-release-item')) {
+          setReleaseActive(navItem);
+          const parentMonth = navItem.closest('.nav-month');
+          if (parentMonth) parentMonth.classList.add('open');
+        } else if (navItem.classList.contains('nav-item')) {
+          setTutorialActive(navItem);
+        }
+      }
+    }, 50);
+  }
+
+  // Run on page load and whenever the hash changes
+  window.addEventListener('load', handleHash);
+  window.addEventListener('hashchange', handleHash);
 </script>
 
 </body>
