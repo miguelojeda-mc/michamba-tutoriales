@@ -4,174 +4,457 @@
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>MiChamba — Centro de Recursos</title>
-  <link rel="icon" type="image/png" href="favicon.png"/>
-  <link rel="apple-touch-icon" href="favicon.png"/>
   <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700;800;900&display=swap" rel="stylesheet"/>
   <style>
     :root {
-      --dark:        #17312c;
+      --dark:        #0f3a2e;
       --coral:       #f2735b;
       --teal:        #22cbad;
       --yellow:      #f7c044;
       --bg:          #ffffff;
       --surface:     #f7f7f5;
+      --surface-2:   #f2f2ee;
       --border:      #e4e4e1;
       --border-dark: #d0d0cc;
       --text:        #1a1a1a;
       --text-2:      #4a5a56;
       --text-3:      #94a09c;
-      --sidebar-w:   220px;
-      --r:           12px;
+      --r:           14px;
+      --r-lg:        18px;
+      --r-xl:        22px;
+      --shadow-sm:   0 1px 2px rgba(23,49,44,0.04), 0 0 0 1px rgba(23,49,44,0.05);
+      --shadow-md:   0 1px 3px rgba(23,49,44,0.04), 0 4px 12px rgba(23,49,44,0.04), 0 0 0 1px rgba(23,49,44,0.06);
+      --shadow-lg:   0 2px 4px rgba(23,49,44,0.04), 0 12px 24px rgba(23,49,44,0.06), 0 24px 48px rgba(23,49,44,0.08), 0 0 0 1px rgba(23,49,44,0.06);
+      --shadow-xl:   0 4px 8px rgba(23,49,44,0.04), 0 20px 36px rgba(23,49,44,0.10), 0 36px 72px rgba(23,49,44,0.12), 0 0 0 1px rgba(23,49,44,0.08);
     }
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     html { scroll-behavior: smooth; }
     body {
       font-family: 'Nunito', sans-serif;
-      background: var(--bg);
+      background:
+        radial-gradient(ellipse at top left, rgba(34,203,173,0.04) 0%, transparent 40%),
+        radial-gradient(ellipse at bottom right, rgba(242,115,91,0.04) 0%, transparent 40%),
+        var(--surface);
+      background-attachment: fixed;
       color: var(--text);
       display: flex;
+      flex-direction: column;
       min-height: 100vh;
       -webkit-font-smoothing: antialiased;
       overflow-x: hidden;
     }
 
-    /* ── SIDEBAR ── */
-    .sidebar {
-      width: var(--sidebar-w);
-      position: fixed; top: 0; left: 0; bottom: 0;
-      background: var(--dark);
-      display: flex; flex-direction: column;
-      padding: 20px 0;
+    /* ── TOP BAR ── */
+    .topbar {
+      position: sticky;
+      top: 0;
       z-index: 200;
-      overflow-y: auto;
+      background: var(--dark);
+      box-shadow: 0 1px 3px rgba(23,49,44,0.08);
+      width: 100%;
     }
-    .sidebar-logo {
-      display: flex; align-items: center; gap: 9px;
-      padding: 0 16px 20px;
-      border-bottom: 1px solid rgba(255,255,255,0.07);
-      margin-bottom: 8px;
+    /* Brand gradient underline — coral → teal (matches header accent), 2px */
+    .topbar::after {
+      content: '';
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      height: 2px;
+      background: linear-gradient(90deg, var(--coral) 0%, var(--teal) 100%);
+      opacity: 0.9;
     }
-    .sidebar-logo-img {
-      width: 34px; height: 34px;
+    .topbar-inner {
+      display: grid;
+      grid-template-columns: 1fr auto 1fr;
+      align-items: center;
+      gap: 24px;
+      padding: 14px 36px;
+      max-width: 100%;
+    }
+    .topbar-brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex-shrink: 0;
+      text-decoration: none;
+      padding: 4px 8px 4px 4px;
+      border-radius: 100px;
+      transition: background 0.22s ease;
+      justify-self: start;
+    }
+    .topbar-brand:hover { background: rgba(255,255,255,0.04); }
+    .topbar-logo-wrap {
+      width: 38px; height: 38px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      position: relative;
+      transition: transform 0.32s cubic-bezier(.34,1.56,.64,1);
+    }
+    /* Soft halo behind the logo that intensifies on hover */
+    .topbar-logo-wrap::before {
+      content: '';
+      position: absolute;
+      inset: -2px;
+      border-radius: inherit;
+      background: linear-gradient(135deg, rgba(242,115,91,0.25) 0%, rgba(34,203,173,0.25) 100%);
+      opacity: 0;
+      filter: blur(8px);
+      transition: opacity 0.32s ease;
+      z-index: -1;
+    }
+    .topbar-brand:hover .topbar-logo-wrap { transform: scale(1.06) rotate(-3deg); }
+    .topbar-brand:hover .topbar-logo-wrap::before { opacity: 1; }
+    .topbar-logo-img {
+      width: 38px; height: 38px;
       object-fit: contain;
       mix-blend-mode: screen;
       flex-shrink: 0;
     }
-    .logo-name { font-size: 14px; font-weight: 700; color: white; letter-spacing: -0.2px; }
-    .logo-sub  { font-size: 10px; color: rgba(255,255,255,0.3); margin-left: auto; }
+    .topbar-brand-text { display: flex; flex-direction: column; line-height: 1; }
+    .topbar-brand-name {
+      font-size: 16px; font-weight: 800; color: white; letter-spacing: -0.4px;
+      transition: color 0.22s ease;
+    }
+    .topbar-brand-eyebrow {
+      font-size: 9px;
+      font-weight: 800;
+      color: rgba(255,255,255,0.45);
+      text-transform: uppercase;
+      letter-spacing: 1.6px;
+      margin-top: 5px;
+      transition: color 0.22s ease;
+    }
+    .topbar-brand:hover .topbar-brand-eyebrow { color: rgba(255,255,255,0.7); }
 
-    /* ── MAIN NAV SECTIONS ── */
-    .nav-section { margin-bottom: 2px; }
-    .nav-section-header {
-      display: flex; align-items: center; gap: 9px;
-      padding: 8px 16px; cursor: pointer;
-      border-left: 2px solid transparent;
-      transition: all 0.15s ease;
+    .topbar-tabs {
+      display: flex;
+      gap: 4px;
+      position: relative;
+      justify-self: center;
+    }
+    .topbar-tab {
+      position: relative;
+      display: inline-flex;
+      align-items: center;
+      gap: 9px;
+      padding: 9px 18px 9px 16px;
+      border-radius: 100px;
+      font-size: 13px;
+      font-weight: 700;
+      color: rgba(255,255,255,0.62);
+      background: transparent;
+      border: 1px solid transparent;
+      cursor: pointer;
+      transition: background 0.22s ease, color 0.22s ease, border-color 0.22s ease, box-shadow 0.22s ease, transform 0.22s cubic-bezier(.34,1.56,.64,1);
+      font-family: 'Nunito', sans-serif;
+      letter-spacing: -0.1px;
       text-decoration: none;
-      user-select: none;
+      overflow: hidden;
     }
-    .nav-section-header:hover { background: rgba(255,255,255,0.04); }
-    .nav-section-header.active { background: rgba(34,203,173,0.1); border-left-color: var(--teal); }
-    .nav-section-icon { width: 20px; height: 20px; display: flex; align-items: center; justify-content: center; font-size: 15px; flex-shrink: 0; opacity: 0.7; }
-    .nav-section-header.active .nav-section-icon { opacity: 1; }
-    .nav-section-title { font-size: 13px; font-weight: 700; color: rgba(255,255,255,0.75); transition: color 0.15s; flex: 1; }
-    .nav-section-header.active .nav-section-title { color: white; }
-    .nav-section-header:hover .nav-section-title { color: rgba(255,255,255,0.9); }
-    .nav-chevron { width: 14px; height: 14px; flex-shrink: 0; transition: transform 0.2s ease; opacity: 0.4; }
-    .nav-section.open .nav-chevron { transform: rotate(180deg); }
-
-    /* ── SUB ITEMS ── */
-    .nav-sub { overflow: hidden; max-height: 0; transition: max-height 0.28s ease; }
-    .nav-section.open .nav-sub { max-height: 800px; }
-    .nav-item {
-      display: flex; align-items: center; gap: 9px;
-      padding: 6px 16px 6px 28px; cursor: pointer; text-decoration: none;
-      border-left: 2px solid transparent;
-      transition: all 0.15s ease;
+    .topbar-tab::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      border-radius: inherit;
+      background: linear-gradient(180deg, rgba(255,255,255,0.06) 0%, transparent 60%);
+      opacity: 0;
+      transition: opacity 0.22s ease;
+      pointer-events: none;
     }
-    .nav-item:hover { background: rgba(255,255,255,0.04); }
-    .nav-item.active { background: rgba(34,203,173,0.08); border-left-color: var(--teal); }
-    .nav-icon { width: 18px; height: 18px; display: flex; align-items: center; justify-content: center; font-size: 13px; flex-shrink: 0; opacity: 0.5; transition: opacity 0.15s; }
-    .nav-item.active .nav-icon { opacity: 1; }
-    .nav-item:hover .nav-icon { opacity: 0.75; }
-    .nav-label { font-size: 12px; font-weight: 500; color: rgba(255,255,255,0.55); transition: color 0.15s; }
-    .nav-item.active .nav-label { color: rgba(255,255,255,0.9); }
-    .nav-item:hover .nav-label { color: rgba(255,255,255,0.8); }
-    .nav-pill { margin-left: auto; font-size: 9px; font-weight: 700; background: rgba(255,255,255,0.07); color: rgba(255,255,255,0.3); padding: 2px 6px; border-radius: 100px; }
-    .nav-item.active .nav-pill { background: rgba(34,203,173,0.2); color: var(--teal); }
+    .topbar-tab:hover {
+      background: rgba(255,255,255,0.06);
+      color: rgba(255,255,255,0.95);
+      transform: translateY(-1px);
+    }
+    .topbar-tab:hover::after { opacity: 1; }
 
-    /* Mejoras sub items */
-    .nav-month { margin-bottom: 2px; }
-    .nav-month-label {
+    .topbar-tab.active {
+      background: linear-gradient(135deg, rgba(34,203,173,0.24) 0%, rgba(34,203,173,0.10) 100%);
+      color: white;
+      border-color: rgba(34,203,173,0.42);
+      box-shadow:
+        inset 0 1px 0 rgba(255,255,255,0.12),
+        inset 0 0 0 1px rgba(34,203,173,0.06),
+        0 4px 18px rgba(34,203,173,0.20),
+        0 1px 3px rgba(0,0,0,0.20);
+    }
+    .topbar-tab.active::after { opacity: 1; }
+
+    /* Tiny pulsing dot to the left of the active tab text */
+    .topbar-tab-dot {
+      width: 5px; height: 5px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.18);
+      flex-shrink: 0;
+      transition: background 0.22s ease, box-shadow 0.22s ease, transform 0.22s ease;
+    }
+    .topbar-tab:hover .topbar-tab-dot { background: rgba(255,255,255,0.4); }
+    .topbar-tab.active .topbar-tab-dot {
+      background: var(--teal);
+      box-shadow: 0 0 10px rgba(34,203,173,0.7), 0 0 0 3px rgba(34,203,173,0.18);
+      transform: scale(1.1);
+    }
+
+    .topbar-tab-emoji { font-size: 14px; line-height: 1; transition: transform 0.22s cubic-bezier(.34,1.56,.64,1); }
+    .topbar-tab:hover .topbar-tab-emoji { transform: scale(1.1) rotate(-3deg); }
+    .topbar-tab.active .topbar-tab-emoji { transform: scale(1.05); }
+
+    .topbar-cta {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 9px 16px 9px 14px;
+      border-radius: 100px;
+      font-size: 12.5px;
+      font-weight: 700;
+      color: rgba(255,255,255,0.7);
+      background: transparent;
+      border: 1px solid rgba(255,255,255,0.15);
+      text-decoration: none;
+      transition: background 0.22s ease, color 0.22s ease, border-color 0.22s ease, transform 0.22s ease, box-shadow 0.22s ease;
+      justify-self: end;
+    }
+    .topbar-cta:hover {
+      background: rgba(255,255,255,0.06);
+      color: white;
+      border-color: rgba(255,255,255,0.28);
+      box-shadow: 0 2px 12px rgba(0,0,0,0.15);
+    }
+    .topbar-cta svg { transition: transform 0.22s cubic-bezier(.34,1.56,.64,1); }
+    .topbar-cta:hover svg { transform: translateX(-3px); }
+
+    /* ── OUTLINE (sub-nav rail on the right) ── */
+    .outline-rail {
+      position: fixed;
+      top: 88px;
+      right: 28px;
+      width: 200px;
+      max-height: calc(100vh - 120px);
+      overflow-y: auto;
+      z-index: 50;
+      padding: 4px 0;
+    }
+    .outline-eyebrow {
+      font-size: 9.5px;
+      font-weight: 800;
+      letter-spacing: 1.4px;
+      text-transform: uppercase;
+      color: var(--text-3);
+      padding: 0 10px 10px;
+      display: block;
+      border-bottom: 1px solid var(--border);
+      margin-bottom: 10px;
+    }
+
+    /* ── OUTLINE SEARCH ── */
+    .outline-search {
+      position: relative;
+      margin: 0 4px 14px;
+    }
+    .outline-search-input {
+      width: 100%;
+      padding: 7px 28px 7px 28px;
+      border: 1px solid var(--border);
+      border-radius: 100px;
+      background: var(--bg);
+      font-family: 'Nunito', sans-serif;
+      font-size: 11.5px;
+      font-weight: 600;
+      color: var(--text);
+      transition: border-color 0.18s ease, box-shadow 0.18s ease, background 0.18s ease;
+      box-shadow: var(--shadow-sm);
+    }
+    .outline-search-input::placeholder { color: var(--text-3); font-weight: 600; }
+    .outline-search-input:focus { outline: none; }
+    #outline-tutoriales .outline-search-input:focus {
+      border-color: var(--teal);
+      box-shadow: 0 0 0 3px rgba(34,203,173,0.12), var(--shadow-sm);
+    }
+    #outline-changelog .outline-search-input:focus {
+      border-color: var(--coral);
+      box-shadow: 0 0 0 3px rgba(242,115,91,0.12), var(--shadow-sm);
+    }
+    .outline-search-icon {
+      position: absolute;
+      left: 10px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--text-3);
+      pointer-events: none;
+      width: 12px;
+      height: 12px;
+    }
+    .outline-search-clear {
+      position: absolute;
+      right: 6px;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 18px;
+      height: 18px;
+      border: none;
+      background: var(--surface);
+      border-radius: 50%;
+      cursor: pointer;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      color: var(--text-2);
+      font-size: 13px;
+      line-height: 1;
+      padding: 0;
+      font-family: inherit;
+      transition: background 0.15s ease, color 0.15s ease;
+    }
+    .outline-search-clear:hover { color: var(--text); background: var(--border); }
+    .outline-search.has-value .outline-search-clear { display: flex; }
+
+    /* Empty state for outline items when search hides their content */
+    .outline-item.empty { opacity: 0.35; pointer-events: none; }
+    .outline-item.empty .outline-dot { background: var(--border-dark) !important; box-shadow: none !important; transform: none !important; }
+    .outline-item.empty .outline-label { color: var(--text-3) !important; font-weight: 600 !important; }
+    .outline-list {
+      display: flex;
+      flex-direction: column;
+      gap: 1px;
+    }
+    .outline-item {
       display: flex;
       align-items: center;
-      gap: 6px;
+      gap: 9px;
+      padding: 7px 10px;
+      border-radius: 8px;
+      cursor: pointer;
+      text-decoration: none;
+      transition: background 0.15s ease, color 0.15s ease;
+      position: relative;
+    }
+    .outline-item:hover { background: rgba(23,49,44,0.04); }
+    .outline-dot {
+      width: 5px; height: 5px;
+      border-radius: 50%;
+      background: var(--border-dark);
+      flex-shrink: 0;
+      transition: background 0.18s ease, transform 0.18s ease, box-shadow 0.18s ease;
+    }
+
+    /* Tutoriales rail — teal-tinted dots */
+    #outline-tutoriales .outline-dot { background: rgba(34,203,173,0.30); }
+    #outline-tutoriales .outline-item:hover .outline-dot {
+      background: rgba(34,203,173,0.6);
+      transform: scale(1.15);
+    }
+    #outline-tutoriales .outline-item:hover { background: rgba(34,203,173,0.06); }
+    #outline-tutoriales .outline-item.active .outline-dot {
+      background: var(--teal);
+      transform: scale(1.3);
+      box-shadow: 0 0 0 3px rgba(34,203,173,0.15);
+    }
+    #outline-tutoriales .outline-item.active { background: rgba(34,203,173,0.06); }
+
+    /* Changelog rail — coral-tinted dots (matches release accent) */
+    #outline-changelog .outline-dot { background: rgba(242,115,91,0.30); }
+    #outline-changelog .outline-item:hover .outline-dot {
+      background: rgba(242,115,91,0.6);
+      transform: scale(1.15);
+    }
+    #outline-changelog .outline-item:hover { background: rgba(242,115,91,0.06); }
+    #outline-changelog .outline-item.active .outline-dot {
+      background: var(--coral);
+      transform: scale(1.3);
+      box-shadow: 0 0 0 3px rgba(242,115,91,0.15);
+    }
+    #outline-changelog .outline-item.active { background: rgba(242,115,91,0.06); }
+    .outline-label {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--text-3);
+      letter-spacing: -0.1px;
+      transition: color 0.15s ease;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .outline-item:hover .outline-label { color: var(--text-2); }
+    .outline-item.active .outline-label { color: var(--text); font-weight: 700; }
+
+    /* Outline month groups (changelog) */
+    .outline-month {
+      margin-top: 14px;
+      padding: 0 10px 4px;
       font-size: 9px;
-      font-weight: 700;
+      font-weight: 800;
       letter-spacing: 1.2px;
       text-transform: uppercase;
-      color: rgba(255,255,255,0.2);
-      padding: 10px 16px 4px 28px;
-      cursor: pointer;
-      user-select: none;
-      transition: color 0.15s ease;
+      color: var(--text-3);
+      opacity: 0.6;
     }
-    .nav-month-label:hover { color: rgba(255,255,255,0.4); }
-    .nav-month-chevron {
-      width: 10px; height: 10px;
-      margin-left: auto;
-      opacity: 0.5;
-      transition: transform 0.2s ease;
-      flex-shrink: 0;
-    }
-    .nav-month.open .nav-month-chevron { transform: rotate(180deg); }
-    .nav-month-items {
-      overflow: hidden;
-      max-height: 0;
-      transition: max-height 0.28s ease;
-    }
-    .nav-month.open .nav-month-items { max-height: 600px; }
-    .nav-release-item {
-      display: flex; align-items: center; gap: 8px;
-      padding: 5px 16px 5px 28px; cursor: pointer; text-decoration: none;
-      border-left: 2px solid transparent; transition: all 0.15s ease;
-    }
-    .nav-release-item:hover { background: rgba(255,255,255,0.04); }
-    .nav-release-item.active { border-left-color: var(--coral); background: rgba(242,115,91,0.08); }
-    .nav-release-dot { width: 5px; height: 5px; border-radius: 50%; background: rgba(255,255,255,0.2); flex-shrink: 0; }
-    .nav-release-item.active .nav-release-dot { background: var(--coral); }
-    .nav-release-label { font-size: 11.5px; font-weight: 600; color: rgba(255,255,255,0.5); }
-    .nav-release-item.active .nav-release-label { color: rgba(255,255,255,0.9); }
-
-    .nav-return {
-      display: flex; align-items: center; gap: 8px;
-      padding: 9px 16px 16px; text-decoration: none;
-      color: rgba(255,255,255,0.35); font-size: 12px; font-weight: 600;
-      transition: color 0.15s; margin-top: auto;
-    }
-    .nav-return:hover { color: var(--teal); }
-    .sidebar-bottom { padding: 12px 16px 0; border-top: 1px solid rgba(255,255,255,0.07); }
-    .sidebar-bottom p { font-size: 11px; color: rgba(255,255,255,0.25); line-height: 1.6; }
+    .outline-month:first-of-type { margin-top: 0; }
 
     /* ── MAIN ── */
-    .main { margin-left: var(--sidebar-w); flex: 1; min-height: 100vh; overflow-x: hidden; }
+    .main { flex: 1; min-height: 100vh; overflow-x: hidden; width: 100%; }
     .view { display: none; }
     .view.active { display: block; }
 
+    /* When the outline rail is visible, give the content area room for it */
+    @media (min-width: 1280px) {
+      .main { padding-right: 240px; }
+    }
+
     /* ── HERO (Tutoriales) ── */
-    .hero { background: var(--bg); padding: 56px 0 40px; position: relative; overflow: hidden; border-bottom: 1px solid var(--border); }
+    .hero {
+      background: transparent;
+      padding: 28px 36px 20px;
+      position: relative;
+      overflow: visible;
+      border-bottom: none;
+    }
+    .hero-inner-wrap {
+      background: var(--bg);
+      border-radius: var(--r-xl);
+      padding: 40px 48px 38px;
+      position: relative;
+      overflow: hidden;
+      box-shadow: var(--shadow-md);
+      display: flex;
+      align-items: center;
+      gap: 24px;
+    }
+    .hero-inner-wrap::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(circle at 85% 30%, rgba(34,203,173,0.06) 0%, transparent 35%),
+        radial-gradient(circle at 95% 80%, rgba(242,115,91,0.05) 0%, transparent 30%);
+      pointer-events: none;
+    }
     .orb { display: none; }
-    .hero-inner { position: relative; z-index: 1; max-width: 640px; padding: 0 16px; }
+    .hero-inner { position: relative; z-index: 2; max-width: 600px; padding: 0; }
     .hero-eyebrow {
-      display: inline-flex; align-items: center; gap: 8px; margin-bottom: 24px;
+      display: inline-flex; align-items: center; gap: 8px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      padding: 4px 11px 4px 10px;
+      border-radius: 100px;
+      margin-bottom: 18px;
+      box-shadow: var(--shadow-sm);
       opacity: 0; animation: fadeUp 0.6s 0.1s ease forwards;
     }
-    .eyebrow-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--teal); box-shadow: 0 0 8px var(--teal); }
-    .eyebrow-text { font-size: 12px; font-weight: 500; color: var(--text-2); letter-spacing: 0.5px; }
+    .eyebrow-dot {
+      width: 6px; height: 6px; border-radius: 50%; background: var(--teal);
+      box-shadow: 0 0 0 0 rgba(34,203,173,0.5);
+      animation: livepulse 2.4s ease-in-out infinite;
+    }
+    .eyebrow-text { font-size: 11px; font-weight: 700; color: var(--text); letter-spacing: 0.2px; }
     .hero h1 {
-      font-size: clamp(22px, 2.8vw, 34px); white-space: nowrap;
-      font-weight: 900; line-height: 1.1; letter-spacing: -1px;
-      color: var(--text); margin-bottom: 20px;
+      font-size: clamp(24px, 3.4vw, 40px);
+      font-weight: 900; line-height: 1; letter-spacing: -1.4px;
+      color: var(--text); margin-bottom: 16px;
+      white-space: nowrap;
       opacity: 0; animation: fadeUp 0.6s 0.2s ease forwards;
     }
     .line-accent {
@@ -180,47 +463,228 @@
       -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
     }
     .line-accent::after { display: none; }
-    .hero-sub { font-size: 16px; line-height: 1.7; color: var(--text-2); max-width: 480px; margin-bottom: 36px; opacity: 0; animation: fadeUp 0.6s 0.3s ease forwards; }
-    .hero-stats { display: flex; align-items: center; opacity: 0; animation: fadeUp 0.6s 0.4s ease forwards; }
-    .stat-block { padding-right: 28px; margin-right: 28px; border-right: 1px solid var(--border-dark); text-align: center; }
-    .stat-block:last-child { border-right: none; }
-    .stat-num { font-size: 28px; font-weight: 800; color: var(--text); letter-spacing: -1px; line-height: 1; }
-    .stat-label { font-size: 11px; color: var(--text-3); font-weight: 500; margin-top: 3px; }
+    .hero-sub { font-size: 14.5px; line-height: 1.55; color: var(--text-2); max-width: 480px; margin-bottom: 22px; opacity: 0; animation: fadeUp 0.6s 0.3s ease forwards; }
+    .hero-stats { display: flex; align-items: center; gap: 8px; opacity: 0; animation: fadeUp 0.6s 0.4s ease forwards; }
+    .stat-block {
+      padding: 11px 16px 9px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      text-align: center;
+      box-shadow: var(--shadow-sm);
+      position: relative;
+      overflow: hidden;
+    }
+    /* Color accent line at the top of each stat */
+    .stat-block::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 2px;
+    }
+    .stat-block:nth-child(1)::before { background: var(--coral); }
+    .stat-block:nth-child(2)::before { background: var(--teal); }
+    .stat-block:nth-child(3)::before { background: var(--yellow); }
+    .stat-block:nth-child(1) .stat-num { color: var(--coral); }
+    .stat-block:nth-child(2) .stat-num { color: #178a72; }
+    .stat-block:nth-child(3) .stat-num { color: #b8861f; }
+    .stat-num { font-size: 20px; font-weight: 900; letter-spacing: -0.7px; line-height: 1; }
+    .stat-label { font-size: 8.5px; color: var(--text-3); font-weight: 700; margin-top: 5px; text-transform: uppercase; letter-spacing: 0.7px; }
+
+    /* Hero decorative product mockup (right side) - flex item, centered against hero content */
+    .hero-decor {
+      position: relative;
+      width: 220px;
+      flex-shrink: 0;
+      margin-left: auto;
+      z-index: 1;
+      opacity: 0;
+      animation: fadeUp 0.8s 0.5s ease forwards;
+    }
+    .decor-card {
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 14px 16px;
+      box-shadow: var(--shadow-md);
+      position: relative;
+    }
+    .decor-card-main {
+      transform: rotate(-2deg);
+      z-index: 3;
+    }
+    .decor-card-back-1 {
+      position: absolute;
+      top: -14px;
+      right: -14px;
+      width: 92%;
+      transform: rotate(4deg);
+      z-index: 2;
+      background: var(--surface);
+      opacity: 0.85;
+    }
+    .decor-card-back-2 {
+      position: absolute;
+      top: 18px;
+      left: -16px;
+      width: 88%;
+      transform: rotate(-6deg);
+      z-index: 1;
+      background: var(--surface);
+      opacity: 0.7;
+    }
+    .decor-card-header {
+      display: flex; align-items: center; gap: 8px;
+      margin-bottom: 10px;
+    }
+    .decor-card-icon {
+      width: 28px; height: 28px;
+      border-radius: 8px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 14px;
+      flex-shrink: 0;
+    }
+    .decor-card-icon.coral  { background: rgba(242,115,91,0.16); border: 1px solid rgba(242,115,91,0.25); }
+    .decor-card-icon.teal   { background: rgba(34,203,173,0.16); border: 1px solid rgba(34,203,173,0.25); }
+    .decor-card-icon.yellow { background: rgba(247,192,68,0.18); border: 1px solid rgba(247,192,68,0.28); }
+    .decor-card-title { font-size: 12px; font-weight: 800; color: var(--text); flex: 1; }
+    .decor-card-tag {
+      font-size: 8px; font-weight: 800; letter-spacing: 0.5px; text-transform: uppercase;
+      padding: 2px 7px; border-radius: 100px;
+      background: rgba(34,203,173,0.12); color: #178a72;
+    }
+    .decor-card-bar {
+      height: 6px;
+      background: var(--surface);
+      border-radius: 3px;
+      margin-bottom: 5px;
+    }
+    .decor-card-bar.short { width: 60%; }
+    .decor-card-progress {
+      height: 4px; background: var(--surface); border-radius: 100px; margin-top: 12px; overflow: hidden;
+    }
+    .decor-card-progress-fill {
+      height: 100%; width: 65%;
+      background: linear-gradient(90deg, var(--coral), var(--teal));
+      border-radius: 100px;
+    }
 
     /* ── TUTORIALES CONTENT ── */
-    .content { padding: 40px 0 80px; }
-    .module { margin-bottom: 64px; scroll-margin-top: 20px; opacity: 0; animation: fadeUp 0.5s ease forwards; padding: 0 16px; }
+    .content { padding: 8px 36px 80px; }
+    .module {
+      background: var(--bg);
+      border-radius: var(--r-lg);
+      padding: 28px 28px 32px;
+      margin-bottom: 16px;
+      scroll-margin-top: 20px;
+      opacity: 0;
+      animation: fadeUp 0.5s ease forwards;
+      box-shadow: var(--shadow-md);
+      transition: box-shadow 0.3s ease;
+    }
+    .module:hover { box-shadow: var(--shadow-lg); }
     .module:nth-child(2) { animation-delay: 0.05s; }
     .module:nth-child(3) { animation-delay: 0.10s; }
     .module:nth-child(4) { animation-delay: 0.15s; }
     .module:nth-child(5) { animation-delay: 0.20s; }
-    .module-header { display: flex; align-items: center; gap: 14px; margin-bottom: 20px; flex-wrap: wrap; }
+    .module-header {
+      display: flex; align-items: center; gap: 14px; margin-bottom: 22px; flex-wrap: wrap;
+      padding-left: 12px;
+      border-left: 3px solid var(--border);
+      transition: border-color 0.3s ease;
+    }
+    .mod-1 .module-header { border-left-color: var(--coral); }
+    .mod-2 .module-header { border-left-color: var(--teal); }
+    .mod-3 .module-header { border-left-color: var(--yellow); }
+    .mod-4 .module-header { border-left-color: var(--coral); }
+    .mod-5 .module-header { border-left-color: var(--teal); }
     .module-num { display: none; }
-    .module-icon-wrap { width: 48px; height: 48px; border-radius: 11px; display: flex; align-items: center; justify-content: center; font-size: 26px; flex-shrink: 0; }
-    .module-title-row { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
-    .module-title { font-size: 20px; font-weight: 800; color: var(--text); letter-spacing: -0.3px; }
-    .module-desc  { font-size: 13px; color: var(--text-2); line-height: 1.5; margin-top: 2px; }
-    .module-count { font-size: 11px; font-weight: 600; color: var(--text-3); background: var(--bg); padding: 4px 10px; border-radius: 100px; border: 1px solid var(--border); white-space: nowrap; }
-    .section-label { font-size: 11px; font-weight: 700; letter-spacing: 0.8px; text-transform: uppercase; color: var(--text-3); margin: 24px 0 14px; display: flex; align-items: center; gap: 10px; }
+    .module-icon-wrap {
+      width: 46px; height: 46px;
+      border-radius: 12px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 24px;
+      flex-shrink: 0;
+      box-shadow: var(--shadow-sm);
+      transition: transform 0.3s cubic-bezier(.34,1.56,.64,1);
+    }
+    .mod-1 .module-icon-wrap { background: rgba(242,115,91,0.14);  border: 1px solid rgba(242,115,91,0.28); }
+    .mod-2 .module-icon-wrap { background: rgba(34,203,173,0.14);  border: 1px solid rgba(34,203,173,0.28); }
+    .mod-3 .module-icon-wrap { background: rgba(247,192,68,0.16);  border: 1px solid rgba(247,192,68,0.32); }
+    .mod-4 .module-icon-wrap { background: rgba(242,115,91,0.14);  border: 1px solid rgba(242,115,91,0.28); }
+    .mod-5 .module-icon-wrap { background: rgba(34,203,173,0.14);  border: 1px solid rgba(34,203,173,0.28); }
+    .module:hover .module-icon-wrap { transform: scale(1.05) rotate(-3deg); }
+    .module-title-row { display: flex; align-items: center; gap: 11px; flex-wrap: wrap; }
+    .module-eyebrow {
+      font-size: 9.5px; font-weight: 800; letter-spacing: 1.3px; text-transform: uppercase;
+      margin-bottom: 5px;
+      display: block;
+    }
+    .mod-1 .module-eyebrow { color: var(--coral); }
+    .mod-2 .module-eyebrow { color: #178a72; }
+    .mod-3 .module-eyebrow { color: #b8861f; }
+    .mod-4 .module-eyebrow { color: var(--coral); }
+    .mod-5 .module-eyebrow { color: #178a72; }
+    .module-title { font-size: 21px; font-weight: 900; color: var(--text); letter-spacing: -0.4px; line-height: 1.15; }
+    .module-desc  { font-size: 13px; color: var(--text-2); line-height: 1.55; margin-top: 5px; max-width: 600px; }
+    .module-count {
+      font-size: 10.5px; font-weight: 700; color: var(--text-2);
+      background: var(--surface);
+      padding: 4px 10px; border-radius: 100px;
+      border: 1px solid var(--border);
+      white-space: nowrap;
+      letter-spacing: 0.2px;
+    }
+    .section-label { font-size: 10px; font-weight: 800; letter-spacing: 1px; text-transform: uppercase; color: var(--text-3); margin: 20px 0 12px; display: flex; align-items: center; gap: 10px; }
     .section-label::after { content: ''; flex: 1; height: 1px; background: var(--border); }
 
     /* ── VIDEO CARDS ── */
-    .video-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 14px; margin-bottom: 14px; }
+    .video-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; margin-bottom: 12px; }
     .video-grid:last-child { margin-bottom: 0; }
-    .video-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--r); overflow: hidden; cursor: pointer; transition: transform 0.2s cubic-bezier(.34,1.56,.64,1), box-shadow 0.2s ease; }
-    .video-card:hover { transform: translateY(-4px) scale(1.005); box-shadow: 0 16px 40px rgba(23,49,44,0.10); border-color: var(--border-dark); }
+    .video-card {
+      background: var(--surface);
+      border-radius: var(--r);
+      overflow: hidden;
+      cursor: pointer;
+      box-shadow: var(--shadow-sm);
+      transition: transform 0.3s cubic-bezier(.34,1.56,.64,1), box-shadow 0.3s ease;
+    }
+    .video-card:hover {
+      transform: translateY(-5px);
+      box-shadow: var(--shadow-lg);
+    }
     .video-thumb { width: 100%; padding-top: 56.25%; position: relative; background: var(--dark); overflow: hidden; }
-    .video-thumb iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: none; }
-    .thumb-placeholder { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 10px; background: linear-gradient(135deg, #1d3d37 0%, #17312c 100%); }
-    .play-btn { width: 36px; height: 36px; border-radius: 50%; background: rgba(255,255,255,0.1); border: 1.5px solid rgba(255,255,255,0.2); display: flex; align-items: center; justify-content: center; transition: background 0.2s, transform 0.2s; }
-    .video-card:hover .play-btn { background: var(--teal); border-color: var(--teal); transform: scale(1.1); }
-    .play-btn svg { width: 13px; height: 13px; fill: white; margin-left: 2px; }
-    .thumb-label { font-size: 9px; color: rgba(255,255,255,0.35); font-weight: 500; letter-spacing: 0.5px; }
-    .duration-badge { position: absolute; bottom: 6px; right: 6px; background: rgba(0,0,0,0.6); color: white; font-size: 9px; font-weight: 600; padding: 2px 6px; border-radius: 4px; }
-    .video-body { padding: 11px 12px 13px; }
-    .video-tag { font-size: 8px; font-weight: 700; letter-spacing: 0.5px; text-transform: uppercase; padding: 2px 6px; border-radius: 100px; display: inline-block; margin-top: 6px; margin-bottom: 0; }
-    .video-title { font-size: 13px; font-weight: 700; color: var(--text); line-height: 1.35; margin-bottom: 0; }
-    .video-desc  { font-size: 11px; color: var(--text-2); line-height: 1.5; }
+    .video-thumb iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: none; transition: transform 0.4s ease; }
+    .video-card:hover .video-thumb iframe { transform: scale(1.02); }
+    .thumb-placeholder { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 10px; background: linear-gradient(135deg, #134a3a 0%, #0f3a2e 100%); }
+    .play-btn {
+      width: 34px; height: 34px; border-radius: 50%;
+      background: rgba(255,255,255,0.12);
+      border: 1.5px solid rgba(255,255,255,0.25);
+      backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
+      display: flex; align-items: center; justify-content: center;
+      transition: background 0.25s ease, transform 0.25s cubic-bezier(.34,1.56,.64,1), border-color 0.25s ease, box-shadow 0.25s ease;
+    }
+    .video-card:hover .play-btn {
+      background: var(--teal);
+      border-color: var(--teal);
+      transform: scale(1.15);
+      box-shadow: 0 8px 24px rgba(34,203,173,0.5), 0 0 0 5px rgba(34,203,173,0.15);
+    }
+    .play-btn svg { width: 12px; height: 12px; fill: white; margin-left: 2px; }
+    .thumb-label { font-size: 8px; color: rgba(255,255,255,0.4); font-weight: 600; letter-spacing: 0.7px; text-transform: uppercase; }
+    .duration-badge {
+      position: absolute; bottom: 7px; right: 7px;
+      background: rgba(0,0,0,0.6);
+      backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+      color: white; font-size: 9px; font-weight: 700;
+      padding: 2px 6px; border-radius: 5px;
+      border: 1px solid rgba(255,255,255,0.1);
+    }
+    .video-body { padding: 10px 12px 12px; background: var(--bg); }
+    .video-tag { font-size: 7.5px; font-weight: 800; letter-spacing: 0.5px; text-transform: uppercase; padding: 2px 7px; border-radius: 100px; display: inline-block; margin-top: 6px; margin-bottom: 0; }
+    .video-title { font-size: 12.5px; font-weight: 800; color: var(--text); line-height: 1.35; margin-bottom: 3px; letter-spacing: -0.05px; }
+    .video-desc  { font-size: 10.5px; color: var(--text-2); line-height: 1.5; }
 
     /* ── MODULE THEMES ── */
     .mod-1 .module-icon-wrap, .mod-2 .module-icon-wrap, .mod-3 .module-icon-wrap,
@@ -230,49 +694,191 @@
     .video-tag.tag-basico         { background: rgba(34,203,173,0.12);  color: #178a72; }
     .video-tag.tag-intermedio     { background: rgba(247,192,68,0.15);  color: #8a6200; }
     .video-tag.tag-avanzado       { background: rgba(242,115,91,0.12);  color: #c0432a; }
-    .video-tag.tag-administracion { background: rgba(23,49,44,0.08);    color: #17312c; }
-    .video-tag.tag-campo          { background: rgba(23,49,44,0.08);    color: #17312c; }
-    .video-tag.tag-general        { background: rgba(23,49,44,0.08);    color: #17312c; }
+    .video-tag.tag-administracion { background: rgba(15,58,46,0.08);    color: #0f3a2e; }
+    .video-tag.tag-campo          { background: rgba(15,58,46,0.08);    color: #0f3a2e; }
+    .video-tag.tag-general        { background: rgba(15,58,46,0.08);    color: #0f3a2e; }
 
     /* ── CHANGELOG VIEW ── */
-    .cl-hero { padding: 48px 48px 32px; border-bottom: 1px solid var(--border); }
-    .cl-breadcrumb { display: flex; align-items: center; gap: 8px; margin-bottom: 24px; }
+    .cl-hero {
+      padding: 28px 36px 20px;
+      border-bottom: none;
+      position: relative;
+      overflow: visible;
+      background: transparent;
+    }
+    .cl-hero-wrap {
+      background: var(--bg);
+      border-radius: var(--r-xl);
+      padding: 40px 48px 38px;
+      position: relative;
+      overflow: hidden;
+      box-shadow: var(--shadow-md);
+      display: flex;
+      align-items: center;
+      gap: 24px;
+    }
+    .cl-hero-wrap::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(circle at 85% 30%, rgba(34,203,173,0.06) 0%, transparent 35%),
+        radial-gradient(circle at 95% 80%, rgba(242,115,91,0.05) 0%, transparent 30%);
+      pointer-events: none;
+    }
+    .cl-breadcrumb {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      padding: 4px 11px 4px 10px;
+      border-radius: 100px;
+      margin-bottom: 18px;
+      box-shadow: var(--shadow-sm);
+      opacity: 0; animation: fadeUp 0.6s 0.1s ease forwards;
+    }
     .cl-breadcrumb-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--teal); animation: livepulse 2.4s ease-in-out infinite; }
     @keyframes livepulse {
       0%,100% { opacity: 1; box-shadow: 0 0 0 0 rgba(34,203,173,.5); }
       50%      { opacity: .5; box-shadow: 0 0 0 5px rgba(34,203,173,0); }
     }
-    .cl-breadcrumb-text { font-size: 12px; font-weight: 600; color: var(--text-2); }
-    .cl-hero h1 { font-size: clamp(24px, 3vw, 38px); font-weight: 900; letter-spacing: -0.03em; line-height: 1.1; color: var(--text); margin-bottom: 12px; }
+    .cl-breadcrumb-text { font-size: 11px; font-weight: 700; color: var(--text); letter-spacing: 0.2px; }
+    .cl-hero h1 {
+      font-size: clamp(24px, 3.4vw, 40px); font-weight: 900; letter-spacing: -1.4px; line-height: 1; color: var(--text); margin-bottom: 16px;
+      opacity: 0; animation: fadeUp 0.6s 0.2s ease forwards;
+    }
     .cl-hero h1 .cl-accent { background: linear-gradient(120deg, var(--coral) 0%, var(--teal) 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
-    .cl-hero-sub { font-size: 15px; color: var(--text-2); line-height: 1.65; }
-    .cl-content { padding: 40px 48px 80px; }
+    .cl-hero-sub {
+      font-size: 14.5px; color: var(--text-2); line-height: 1.55; max-width: 480px;
+      opacity: 0; animation: fadeUp 0.6s 0.3s ease forwards;
+    }
+    .cl-hero-inner { position: relative; z-index: 2; max-width: 600px; }
+    .cl-content { padding: 8px 36px 80px; }
 
     /* Release sections */
-    .release-section { margin-bottom: 56px; scroll-margin-top: 24px; }
-    .release-header { display: flex; align-items: center; gap: 12px; margin-bottom: 20px; padding-bottom: 16px; border-bottom: 1px solid var(--border); }
-    .release-pill { font-size: 11px; font-weight: 700; color: #c0432a; padding: 4px 12px; border-radius: 20px; background: rgba(242,115,91,0.10); border: 1px solid rgba(242,115,91,0.25); }
-    .pdf-btn { display: flex; align-items: center; gap: 5px; margin-left: auto; font-size: 11px; font-weight: 700; color: var(--text-3); background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 5px 10px; cursor: pointer; transition: all 0.15s ease; font-family: 'Nunito', sans-serif; }
-    .pdf-btn:hover { border-color: var(--border-dark); color: var(--text-2); }
+    .release-section {
+      background: var(--surface);
+      border-radius: var(--r-lg);
+      padding: 24px 26px 26px;
+      margin-bottom: 16px;
+      scroll-margin-top: 24px;
+      box-shadow: var(--shadow-md);
+      transition: box-shadow 0.3s ease;
+    }
+    .release-section:hover { box-shadow: var(--shadow-lg); }
+    .release-header { display: flex; align-items: center; gap: 14px; margin-bottom: 22px; padding-bottom: 16px; border-bottom: 1px solid var(--border); }
+
+    /* Calendar-style date tile */
+    .release-date {
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      width: 72px;
+      flex-shrink: 0;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 7px 6px 9px;
+      box-shadow: var(--shadow-sm);
+    }
+    .release-date-month {
+      font-size: 9px; font-weight: 800;
+      color: var(--coral);
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      line-height: 1;
+      margin-bottom: 3px;
+    }
+    .release-date-day {
+      font-size: 22px; font-weight: 900;
+      color: var(--text);
+      letter-spacing: -1px;
+      line-height: 1;
+    }
+    .release-date-year {
+      font-size: 8.5px; font-weight: 700;
+      color: var(--text-3);
+      letter-spacing: 0.4px;
+      margin-top: 3px;
+    }
+
+    /* Meta info next to the calendar tile */
+    .release-meta { flex: 1; display: flex; flex-direction: column; gap: 4px; }
+    .release-meta-title { font-size: 14px; font-weight: 800; color: var(--text); letter-spacing: -0.2px; line-height: 1.2; }
+    .release-meta-sub { font-size: 11.5px; font-weight: 600; color: var(--text-3); letter-spacing: 0.1px; }
+
+    .pdf-btn {
+      display: flex; align-items: center; gap: 5px; margin-left: auto;
+      font-size: 11px; font-weight: 700;
+      color: var(--text-2);
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 6px 11px;
+      cursor: pointer;
+      transition: all 0.18s ease;
+      font-family: 'Nunito', sans-serif;
+      box-shadow: var(--shadow-sm);
+    }
+    .pdf-btn:hover {
+      border-color: var(--text-2);
+      color: var(--text);
+      transform: translateY(-1px);
+      box-shadow: var(--shadow-md);
+    }
+    .pdf-btn svg { transition: transform 0.18s ease; }
+    .pdf-btn:hover svg { transform: translateY(1px); }
 
     /* Feature cards */
-    .feature-card { display: flex; align-items: flex-start; gap: 14px; background: var(--surface); border: 1px solid var(--border); border-radius: var(--r); padding: 16px 18px; margin-bottom: 10px; transition: box-shadow 0.2s ease, border-color 0.2s ease; animation: cardIn 0.4s cubic-bezier(.16,1,.3,1) both; }
+    .feature-card {
+      display: flex; align-items: flex-start; gap: 14px;
+      background: var(--bg);
+      border-radius: var(--r);
+      padding: 16px 18px;
+      margin-bottom: 10px;
+      box-shadow: var(--shadow-sm);
+      transition: transform 0.3s cubic-bezier(.34,1.56,.64,1), box-shadow 0.3s ease;
+      animation: cardIn 0.4s cubic-bezier(.16,1,.3,1) both;
+    }
     @keyframes cardIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-    .feature-card:hover { box-shadow: 0 4px 20px rgba(23,49,44,0.08); border-color: var(--border-dark); }
-    .feature-icon { width: 40px; height: 40px; flex-shrink: 0; border-radius: 10px; border: 1px solid transparent; display: flex; align-items: center; justify-content: center; font-size: 19px; transition: transform 0.2s ease; }
-    .feature-card:hover .feature-icon { transform: scale(1.06) rotate(-2deg); }
-    .feature-icon.icon-web       { background: rgba(147,197,253,0.20);  border-color: rgba(147,197,253,0.40); }
-    .feature-icon.icon-movil     { background: rgba(247,192,68,0.12);   border-color: rgba(247,192,68,0.30); }
-    .feature-icon.icon-whatsapp  { background: rgba(34,203,173,0.12);   border-color: rgba(34,203,173,0.25); }
-    .feature-icon.icon-logistica { background: rgba(220,38,38,0.10);    border-color: rgba(220,38,38,0.22); }
+    .feature-card:hover {
+      transform: translateY(-3px);
+      box-shadow: var(--shadow-lg);
+    }
+    .feature-icon {
+      width: 40px; height: 40px;
+      flex-shrink: 0;
+      border-radius: 11px;
+      border: 1px solid transparent;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 19px;
+      transition: transform 0.3s cubic-bezier(.34,1.56,.64,1);
+      box-shadow: var(--shadow-sm);
+    }
+    .feature-card:hover .feature-icon { transform: scale(1.1) rotate(-4deg); }
+    .feature-icon.icon-web       { background: linear-gradient(135deg, rgba(147,197,253,0.30), rgba(147,197,253,0.15));  border-color: rgba(147,197,253,0.40); }
+    .feature-icon.icon-movil     { background: linear-gradient(135deg, rgba(247,192,68,0.18), rgba(247,192,68,0.08));   border-color: rgba(247,192,68,0.30); }
+    .feature-icon.icon-whatsapp  { background: linear-gradient(135deg, rgba(34,203,173,0.18), rgba(34,203,173,0.08));   border-color: rgba(34,203,173,0.25); }
+    .feature-icon.icon-logistica { background: linear-gradient(135deg, rgba(220,38,38,0.16), rgba(220,38,38,0.06));    border-color: rgba(220,38,38,0.22); }
     .feature-body { flex: 1; min-width: 0; }
-    .feature-header { display: flex; align-items: center; flex-wrap: wrap; gap: 10px; margin-bottom: 6px; }
-    .feature-title { font-size: 13.5px; font-weight: 800; color: var(--text); letter-spacing: -0.01em; line-height: 1.35; }
-    .feature-desc { font-size: 13px; font-weight: 500; color: var(--text-2); line-height: 1.65; margin-bottom: 10px; }
+    .feature-header { display: flex; align-items: center; flex-wrap: wrap; gap: 10px; margin-bottom: 7px; }
+    .feature-title { font-size: 13.5px; font-weight: 800; color: var(--text); letter-spacing: -0.1px; line-height: 1.35; }
+    .feature-desc { font-size: 12.5px; font-weight: 500; color: var(--text-2); line-height: 1.65; margin-bottom: 10px; padding-top: 7px; border-top: 1px solid var(--border); }
     .feature-tags { display: flex; flex-wrap: wrap; gap: 6px; }
-    .loom-btn { display: inline-flex; align-items: center; gap: 5px; font-size: 11px; font-weight: 700; color: #178a72; background: rgba(34,203,173,0.10); border: 1px solid rgba(34,203,173,0.25); border-radius: 20px; padding: 3px 10px; text-decoration: none; transition: background 0.15s ease; white-space: nowrap; }
-    .loom-btn:hover { background: rgba(34,203,173,0.18); }
-    .tag { font-size: 10.5px; font-weight: 700; padding: 2px 9px; border-radius: 20px; }
+    .loom-btn {
+      display: inline-flex; align-items: center; gap: 5px;
+      font-size: 10.5px; font-weight: 700; color: #178a72;
+      background: rgba(34,203,173,0.10);
+      border: 1px solid rgba(34,203,173,0.25);
+      border-radius: 100px;
+      padding: 3px 10px;
+      text-decoration: none;
+      transition: background 0.15s ease, transform 0.15s ease, box-shadow 0.15s ease;
+      white-space: nowrap;
+    }
+    .loom-btn:hover {
+      background: rgba(34,203,173,0.18);
+      transform: translateY(-1px);
+      box-shadow: 0 4px 12px rgba(34,203,173,0.18);
+    }
+    .tag { font-size: 10px; font-weight: 800; padding: 2px 9px; border-radius: 100px; letter-spacing: 0.2px; }
     .tag-teal      { background: rgba(147,197,253,0.20);  color: #2563eb; }
     .tag-yellow    { background: rgba(247,192,68,0.12);  color: #8a6200; }
     .tag-coral     { background: rgba(34,203,173,0.12);  color: #178a72; }
@@ -282,62 +888,60 @@
     @keyframes fadeUp { from { opacity: 0; transform: translateY(18px); } to { opacity: 1; transform: translateY(0); } }
 
     /* ── RESPONSIVE ── */
+    @media (max-width: 1279px) {
+      .outline-rail { display: none; }
+    }
+    @media (max-width: 1100px) {
+      .hero-decor { display: none; }
+    }
     @media (max-width: 1024px) {
       .video-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-      .cl-hero { padding: 32px 24px 24px; }
-      .cl-content { padding: 24px 24px 60px; }
+      .hero { padding: 20px 24px 14px; }
+      .hero-inner-wrap { padding: 32px 32px 30px; }
+      .cl-hero { padding: 20px 24px 14px; }
+      .cl-hero-wrap { padding: 32px 32px 30px; }
+      .cl-content { padding: 8px 24px 60px; }
+      .content { padding: 8px 24px 60px; }
+      .module { padding: 24px 22px 26px; }
+      .topbar-inner { padding: 12px 24px; gap: 20px; }
+    }
+    @media (max-width: 720px) {
+      .topbar-brand-eyebrow { display: none; }
+      .topbar-cta span { display: none; }
+      .topbar-tab-emoji { font-size: 15px; }
     }
     @media (max-width: 600px) {
-      .sidebar { display: none; }
-      .main { margin-left: 0; }
-      .hero { padding: 32px 20px 28px; }
-      .content { padding: 28px 20px 60px; }
-      .video-grid { grid-template-columns: 1fr; }
-      .hero h1 { white-space: normal; font-size: 26px; }
-      .hero-stats { flex-wrap: wrap; gap: 16px; }
-      .stat-block { border-right: none; padding-right: 0; margin-right: 0; }
-      .module { padding: 0; }
-      .cl-hero { padding: 24px 20px 20px; }
-      .cl-content { padding: 20px 20px 60px; }
-      .release-header { flex-wrap: wrap; gap: 8px; }
+      .hero { padding: 12px 12px 6px; }
+      .hero-inner-wrap { padding: 22px 20px 22px; border-radius: var(--r-lg); }
+      .content { padding: 8px 12px 60px; }
+      .module { padding: 22px 18px 22px; border-radius: var(--r); }
+      .video-grid { grid-template-columns: 1fr; gap: 14px; }
+      .hero h1 { font-size: 24px; letter-spacing: -0.8px; white-space: normal; }
+      .hero-sub { font-size: 13.5px; margin-bottom: 18px; }
+      .hero-stats { flex-wrap: wrap; gap: 6px; }
+      .stat-block { padding: 7px 10px; flex: 1; min-width: 0; }
+      .stat-num { font-size: 16px; letter-spacing: -0.5px; }
+      .stat-label { font-size: 7.5px; margin-top: 3px; }
+      .module-title { font-size: 19px; }
+      .cl-hero { padding: 12px 12px 6px; }
+      .cl-hero-wrap { padding: 22px 20px 22px; border-radius: var(--r-lg); }
+      .cl-hero h1 { font-size: 24px; letter-spacing: -0.8px; }
+      .cl-hero-sub { font-size: 13.5px; }
+      .cl-content { padding: 8px 12px 60px; }
+      .release-section { padding: 20px 18px 20px; border-radius: var(--r); }
+      .release-header { flex-wrap: wrap; gap: 10px; }
+      .release-meta { flex: 1 1 auto; min-width: 0; }
       .pdf-btn { margin-left: 0; }
       .feature-card { padding: 12px 14px; gap: 10px; }
       .feature-icon { width: 34px; height: 34px; font-size: 16px; }
-    }
-
-    /* ── MOBILE TABS (hidden on desktop) ── */
-    .mobile-tabs { display: none; }
-    @media (max-width: 600px) {
-      .mobile-tabs {
-        display: flex;
-        position: sticky;
-        top: 0;
-        z-index: 100;
-        background: var(--bg);
-        border-bottom: 1px solid var(--border);
+      .topbar-inner {
+        display: grid;
+        grid-template-columns: 1fr auto;
+        padding: 10px 16px;
+        gap: 12px;
       }
-      .mobile-tab {
-        flex: 1;
-        padding: 14px 10px;
-        background: none;
-        border: none;
-        border-bottom: 2px solid transparent;
-        font-family: 'Nunito', sans-serif;
-        font-size: 13px;
-        font-weight: 700;
-        color: var(--text-3);
-        cursor: pointer;
-        transition: color 0.15s ease, border-color 0.15s ease, background 0.15s ease;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        gap: 6px;
-      }
-      .mobile-tab.active {
-        color: var(--dark);
-        border-bottom-color: var(--teal);
-      }
-      .mobile-tab:active { background: var(--surface); }
+      .topbar-tabs { grid-column: 1 / -1; padding-left: 0; margin-left: 0; }
+      .topbar-tab { flex: 1; justify-content: center; padding: 9px 12px; }
     }
 
     /* ── PRINT ── */
@@ -348,7 +952,7 @@
         display: flex;
         align-items: center;
         gap: 12px;
-        background: #17312c;
+        background: #0f3a2e;
         padding: 14px 18px;
         margin: 0 0 20px;
         border-radius: 8px;
@@ -376,18 +980,23 @@
         text-transform: uppercase;
         letter-spacing: 1.5px;
       }
-      body.printing-single .sidebar,
+      body.printing-single .topbar,
+      body.printing-single .outline-rail,
       body.printing-single .cl-hero,
-      body.printing-single .mobile-tabs,
       body.printing-single .pdf-btn { display: none !important; }
       body.printing-single { background: #fff !important; }
-      body.printing-single .main { margin-left: 0 !important; }
+      body.printing-single .main { padding-right: 0 !important; }
       body.printing-single .view:not(.active) { display: none !important; }
       body.printing-single .cl-content { padding: 0 !important; }
       body.printing-single .release-section { display: none !important; }
-      body.printing-single .release-section.print-target { display: block !important; }
+      body.printing-single .release-section.print-target {
+        display: block !important;
+        background: transparent !important;
+        box-shadow: none !important;
+        padding: 0 !important;
+      }
       body.printing-single .release-header { border-bottom: 1px solid #e4e4e1; margin-bottom: 14px; padding-bottom: 12px; }
-      body.printing-single .release-pill { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+      body.printing-single .release-date { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
       body.printing-single .feature-card { break-inside: avoid; box-shadow: none !important; border: 1px solid #d0d0cc !important; background: #fff !important; transform: none !important; animation: none !important; margin-bottom: 8px !important; }
       body.printing-single .feature-icon { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
       body.printing-single .tag { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
@@ -398,114 +1007,111 @@
 </head>
 <body>
 
-<!-- SIDEBAR -->
-<aside class="sidebar">
-  <div class="sidebar-logo">
-    <img src="logo.png" alt="MiChamba" class="sidebar-logo-img"/>
-    <span class="logo-name">MiChamba</span>
-    <span class="logo-sub">Recursos</span>
-  </div>
-
-  <!-- TUTORIALES SECTION -->
-  <div class="nav-section open" id="section-tutoriales">
-    <div class="nav-section-header active" onclick="switchSection('tutoriales', event)">
-      <div class="nav-section-icon">🎓</div>
-      <span class="nav-section-title">Videos Tutoriales</span>
-      <svg class="nav-chevron" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.5)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
-    </div>
-    <div class="nav-sub">
-      <a href="#modulo-1" class="nav-item active" onclick="setTutorialActive(this)">
-        <div class="nav-icon">🗺️</div>
-        <span class="nav-label">Presentación</span>
-        <span class="nav-pill">1</span>
-      </a>
-      <a href="#modulo-2" class="nav-item" onclick="setTutorialActive(this)">
-        <div class="nav-icon">📁</div>
-        <span class="nav-label">Creaciones</span>
-        <span class="nav-pill">5</span>
-      </a>
-      <a href="#modulo-3" class="nav-item" onclick="setTutorialActive(this)">
-        <div class="nav-icon">✅</div>
-        <span class="nav-label">Gestión de Tareas</span>
-        <span class="nav-pill">0</span>
-      </a>
-      <a href="#modulo-4" class="nav-item" onclick="setTutorialActive(this)">
-        <div class="nav-icon">💻</div>
-        <span class="nav-label">La Plataforma</span>
-        <span class="nav-pill">0</span>
-      </a>
-      <a href="#modulo-5" class="nav-item" onclick="setTutorialActive(this)">
-        <div class="nav-icon">💬</div>
-        <span class="nav-label">WhatsApp</span>
-        <span class="nav-pill">1</span>
-      </a>
-    </div>
-  </div>
-
-  <!-- CHANGELOG SECTION -->
-  <div class="nav-section" id="section-changelog">
-    <div class="nav-section-header" onclick="switchSection('changelog', event)">
-      <div class="nav-section-icon">📋</div>
-      <span class="nav-section-title">Mejoras Implementadas</span>
-      <svg class="nav-chevron" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.5)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
-    </div>
-    <div class="nav-sub">
-      <!--
-        ⚠️ AL AGREGAR UN NUEVO MES:
-        1. El nuevo <div class="nav-month"> va al INICIO (cronológico inverso).
-        2. SOLO el mes más reciente debe tener la clase "open".
-        3. Al agregar el nuevo mes, QUITAR la clase "open" del mes anterior
-           para que solo el más reciente quede expandido por defecto.
-      -->
-      <div class="nav-month open">
-        <div class="nav-month-label" onclick="toggleMonth(this)">
-          <span>Abril 2026</span>
-          <svg class="nav-month-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
-        </div>
-        <div class="nav-month-items">
-          <a href="#apr17-2026" class="nav-release-item" onclick="setReleaseActive(this)">
-            <div class="nav-release-dot"></div>
-            <span class="nav-release-label">17 Abr</span>
-          </a>
-          <a href="#apr10-2026" class="nav-release-item" onclick="setReleaseActive(this)">
-            <div class="nav-release-dot"></div>
-            <span class="nav-release-label">10 Abr</span>
-          </a>
-        </div>
+<!-- TOP BAR -->
+<header class="topbar">
+  <div class="topbar-inner">
+    <a href="#" class="topbar-brand" onclick="switchToSection('tutoriales');return false;">
+      <div class="topbar-logo-wrap">
+        <img src="logo.png" alt="MiChamba" class="topbar-logo-img"/>
       </div>
-      <div class="nav-month">
-        <div class="nav-month-label" onclick="toggleMonth(this)">
-          <span>Marzo 2026</span>
-          <svg class="nav-month-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
-        </div>
-        <div class="nav-month-items">
-          <a href="#mar27-2026" class="nav-release-item" onclick="setReleaseActive(this)">
-            <div class="nav-release-dot"></div>
-            <span class="nav-release-label">27 Mar</span>
-          </a>
-          <a href="#mar20-2026" class="nav-release-item" onclick="setReleaseActive(this)">
-            <div class="nav-release-dot"></div>
-            <span class="nav-release-label">20 Mar</span>
-          </a>
-          <a href="#mar13-2026" class="nav-release-item" onclick="setReleaseActive(this)">
-            <div class="nav-release-dot"></div>
-            <span class="nav-release-label">13 Mar</span>
-          </a>
-          <a href="#mar06-2026" class="nav-release-item" onclick="setReleaseActive(this)">
-            <div class="nav-release-dot"></div>
-            <span class="nav-release-label">6 Mar</span>
-          </a>
-        </div>
+      <div class="topbar-brand-text">
+        <span class="topbar-brand-name">MiChamba</span>
+        <span class="topbar-brand-eyebrow">Centro de Recursos</span>
       </div>
-    </div>
-  </div>
+    </a>
 
-  <a href="https://app.michamba.ai/home/" target="_blank" class="nav-return">
-    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
-    <span>Volver a MiChamba</span>
-  </a>
-  <div class="sidebar-bottom">
-    <p>¿Tienes dudas? Contacta a tu Customer Success Manager.</p>
+    <nav class="topbar-tabs">
+      <button class="topbar-tab active" data-section="tutoriales" onclick="switchToSection('tutoriales')">
+        <span class="topbar-tab-dot"></span>
+        <span class="topbar-tab-emoji">🎓</span>
+        <span>Videos Tutoriales</span>
+      </button>
+      <button class="topbar-tab" data-section="changelog" onclick="switchToSection('changelog')">
+        <span class="topbar-tab-dot"></span>
+        <span class="topbar-tab-emoji">📋</span>
+        <span>Mejoras Implementadas</span>
+      </button>
+    </nav>
+
+    <a href="https://app.michamba.ai/home/" target="_blank" class="topbar-cta">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+      <span>Volver a MiChamba</span>
+    </a>
+  </div>
+</header>
+
+<!-- OUTLINE RAIL: Tutoriales -->
+<aside class="outline-rail" id="outline-tutoriales">
+  <span class="outline-eyebrow">En esta página</span>
+  <div class="outline-search">
+    <svg class="outline-search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+    <input type="text" class="outline-search-input" placeholder="Buscar tutorial..." aria-label="Buscar tutorial"/>
+    <button type="button" class="outline-search-clear" aria-label="Limpiar búsqueda">×</button>
+  </div>
+  <div class="outline-list">
+    <a href="#modulo-1" class="outline-item active" onclick="setOutlineActive(this, 'tutoriales')">
+      <span class="outline-dot"></span>
+      <span class="outline-label">Presentación</span>
+    </a>
+    <a href="#modulo-2" class="outline-item" onclick="setOutlineActive(this, 'tutoriales')">
+      <span class="outline-dot"></span>
+      <span class="outline-label">Creaciones</span>
+    </a>
+    <a href="#modulo-3" class="outline-item" onclick="setOutlineActive(this, 'tutoriales')">
+      <span class="outline-dot"></span>
+      <span class="outline-label">Gestión de Tareas</span>
+    </a>
+    <a href="#modulo-4" class="outline-item" onclick="setOutlineActive(this, 'tutoriales')">
+      <span class="outline-dot"></span>
+      <span class="outline-label">La Plataforma</span>
+    </a>
+    <a href="#modulo-5" class="outline-item" onclick="setOutlineActive(this, 'tutoriales')">
+      <span class="outline-dot"></span>
+      <span class="outline-label">WhatsApp</span>
+    </a>
+  </div>
+</aside>
+
+<!-- OUTLINE RAIL: Changelog (hidden by default; shown when changelog view is active) -->
+<aside class="outline-rail" id="outline-changelog" style="display:none;">
+  <span class="outline-eyebrow">Releases</span>
+  <div class="outline-search">
+    <svg class="outline-search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+    <input type="text" class="outline-search-input" placeholder="Buscar mejora..." aria-label="Buscar mejora"/>
+    <button type="button" class="outline-search-clear" aria-label="Limpiar búsqueda">×</button>
+  </div>
+  <div class="outline-list">
+    <!--
+      ⚠️ AL AGREGAR UN NUEVO MES:
+      1. El nuevo <div class="outline-month"> va antes de los releases del mes.
+      2. Los releases nuevos van al inicio (cronológico inverso).
+    -->
+    <div class="outline-month">Abril 2026</div>
+    <a href="#17-abril-2026" class="outline-item" onclick="setOutlineActive(this, 'changelog')">
+      <span class="outline-dot"></span>
+      <span class="outline-label">17 Abril</span>
+    </a>
+    <a href="#10-abril-2026" class="outline-item" onclick="setOutlineActive(this, 'changelog')">
+      <span class="outline-dot"></span>
+      <span class="outline-label">10 Abril</span>
+    </a>
+    <div class="outline-month">Marzo 2026</div>
+    <a href="#27-marzo-2026" class="outline-item" onclick="setOutlineActive(this, 'changelog')">
+      <span class="outline-dot"></span>
+      <span class="outline-label">27 Marzo</span>
+    </a>
+    <a href="#20-marzo-2026" class="outline-item" onclick="setOutlineActive(this, 'changelog')">
+      <span class="outline-dot"></span>
+      <span class="outline-label">20 Marzo</span>
+    </a>
+    <a href="#13-marzo-2026" class="outline-item" onclick="setOutlineActive(this, 'changelog')">
+      <span class="outline-dot"></span>
+      <span class="outline-label">13 Marzo</span>
+    </a>
+    <a href="#06-marzo-2026" class="outline-item" onclick="setOutlineActive(this, 'changelog')">
+      <span class="outline-dot"></span>
+      <span class="outline-label">6 Marzo</span>
+    </a>
   </div>
 </aside>
 
@@ -519,28 +1125,49 @@
     <span class="print-section">Mejoras del Producto</span>
   </div>
 
-  <!-- MOBILE TABS (visible only <600px) -->
-  <div class="mobile-tabs">
-    <button class="mobile-tab active" data-section="tutoriales" onclick="switchToSection('tutoriales')">
-      <span>🎓</span> Videos Tutoriales
-    </button>
-    <button class="mobile-tab" data-section="changelog" onclick="switchToSection('changelog')">
-      <span>📋</span> Mejoras Implementadas
-    </button>
-  </div>
-
   <!-- ── TUTORIALES VIEW ── -->
   <div class="view active" id="view-tutoriales">
     <section class="hero">
-      <div class="orb orb-1"></div><div class="orb orb-2"></div>
-      <div class="hero-inner">
-        <div class="hero-eyebrow"><div class="eyebrow-dot"></div><span class="eyebrow-text">Centro de aprendizaje · MiChamba</span></div>
-        <h1>Aprende a usar <span class="line-accent">MiChamba</span> en minutos.</h1>
-        <p class="hero-sub">Tutoriales organizados en el mismo flujo que tu operación diaria. De la configuración inicial al manejo avanzado de WhatsApp.</p>
-        <div class="hero-stats">
-          <div class="stat-block"><div class="stat-num">5</div><div class="stat-label">Módulos</div></div>
-          <div class="stat-block"><div class="stat-num">7</div><div class="stat-label">Videos</div></div>
-          <div class="stat-block"><div class="stat-num">~7 min</div><div class="stat-label">Duración total</div></div>
+      <div class="hero-inner-wrap">
+        <div class="orb orb-1"></div><div class="orb orb-2"></div>
+        <div class="hero-inner">
+          <div class="hero-eyebrow"><div class="eyebrow-dot"></div><span class="eyebrow-text">Centro de aprendizaje · MiChamba</span></div>
+          <h1>Domina <span class="line-accent">MiChamba</span> en minutos.</h1>
+          <p class="hero-sub">Tutoriales organizados en el mismo flujo que tu operación diaria. De la configuración inicial al manejo avanzado de WhatsApp.</p>
+          <div class="hero-stats">
+            <div class="stat-block"><div class="stat-num">5</div><div class="stat-label">Módulos</div></div>
+            <div class="stat-block"><div class="stat-num">7</div><div class="stat-label">Videos</div></div>
+            <div class="stat-block"><div class="stat-num">~7 min</div><div class="stat-label">Duración total</div></div>
+          </div>
+        </div>
+        <div class="hero-decor" aria-hidden="true">
+          <div class="decor-card decor-card-back-2">
+            <div class="decor-card-header">
+              <div class="decor-card-icon yellow">📅</div>
+              <div class="decor-card-title">Reporte semanal</div>
+            </div>
+            <div class="decor-card-bar"></div>
+            <div class="decor-card-bar short"></div>
+          </div>
+          <div class="decor-card decor-card-back-1">
+            <div class="decor-card-header">
+              <div class="decor-card-icon coral">📁</div>
+              <div class="decor-card-title">Carpeta principal</div>
+              <span class="decor-card-tag">Activa</span>
+            </div>
+            <div class="decor-card-bar"></div>
+            <div class="decor-card-bar short"></div>
+          </div>
+          <div class="decor-card decor-card-main">
+            <div class="decor-card-header">
+              <div class="decor-card-icon teal">✅</div>
+              <div class="decor-card-title">Mi primera tarea</div>
+              <span class="decor-card-tag">En curso</span>
+            </div>
+            <div class="decor-card-bar"></div>
+            <div class="decor-card-bar short"></div>
+            <div class="decor-card-progress"><div class="decor-card-progress-fill"></div></div>
+          </div>
         </div>
       </div>
     </section>
@@ -551,7 +1178,7 @@
         <div class="module-header">
           <div class="module-num">1</div>
           <div class="module-icon-wrap">🗺️</div>
-          <div><div class="module-title-row"><div class="module-title">Presentación de MiChamba</div><div class="module-count">1 video</div></div><div class="module-desc">Antes de arrancar, conoce el terreno. Todo lo que necesitas saber para empezar.</div></div>
+          <div><span class="module-eyebrow">Módulo 01</span><div class="module-title-row"><div class="module-title">Presentación de MiChamba</div><div class="module-count">1 video</div></div><div class="module-desc">Antes de arrancar, conoce el terreno. Todo lo que necesitas saber para empezar.</div></div>
         </div>
         <div class="video-grid">
           <div class="video-card">
@@ -566,7 +1193,7 @@
         <div class="module-header">
           <div class="module-num">2</div>
           <div class="module-icon-wrap">📁</div>
-          <div><div class="module-title-row"><div class="module-title">Creaciones</div><div class="module-count">5 videos</div></div><div class="module-desc">Estructura tu operación — carpetas, sub-carpetas y tareas.</div></div>
+          <div><span class="module-eyebrow">Módulo 02</span><div class="module-title-row"><div class="module-title">Creaciones</div><div class="module-count">5 videos</div></div><div class="module-desc">Estructura tu operación — carpetas, sub-carpetas y tareas.</div></div>
         </div>
         <div class="video-grid">
           <div class="video-card">
@@ -599,7 +1226,7 @@
         <div class="module-header">
           <div class="module-num">3</div>
           <div class="module-icon-wrap">✅</div>
-          <div><div class="module-title-row"><div class="module-title">Gestión de Tareas</div><div class="module-count">0 videos</div></div><div class="module-desc">Administra, da seguimiento y cierra tareas eficientemente.</div></div>
+          <div><span class="module-eyebrow">Módulo 03</span><div class="module-title-row"><div class="module-title">Gestión de Tareas</div><div class="module-count">0 videos</div></div><div class="module-desc">Administra, da seguimiento y cierra tareas eficientemente.</div></div>
         </div>
       </section>
 
@@ -608,7 +1235,7 @@
         <div class="module-header">
           <div class="module-num">4</div>
           <div class="module-icon-wrap">💻</div>
-          <div><div class="module-title-row"><div class="module-title">Navegando la Plataforma</div><div class="module-count">0 videos</div></div><div class="module-desc">Un recorrido por cada sección del menú y cómo sacarle provecho.</div></div>
+          <div><span class="module-eyebrow">Módulo 04</span><div class="module-title-row"><div class="module-title">Navegando la Plataforma</div><div class="module-count">0 videos</div></div><div class="module-desc">Un recorrido por cada sección del menú y cómo sacarle provecho.</div></div>
         </div>
       </section>
 
@@ -617,7 +1244,7 @@
         <div class="module-header">
           <div class="module-num">5</div>
           <div class="module-icon-wrap">💬</div>
-          <div><div class="module-title-row"><div class="module-title">Todo sobre WhatsApp</div><div class="module-count">1 video</div></div><div class="module-desc">El corazón de MiChamba en campo. Así opera tu equipo.</div></div>
+          <div><span class="module-eyebrow">Módulo 05</span><div class="module-title-row"><div class="module-title">Todo sobre WhatsApp</div><div class="module-count">1 video</div></div><div class="module-desc">El corazón de MiChamba en campo. Así opera tu equipo.</div></div>
         </div>
         <div class="video-grid">
           <div class="video-card">
@@ -632,21 +1259,62 @@
   <!-- ── CHANGELOG VIEW ── -->
   <div class="view" id="view-changelog">
     <div class="cl-hero">
-      <div class="cl-breadcrumb">
-        <div class="cl-breadcrumb-dot"></div>
-        <span class="cl-breadcrumb-text">Mejoras · MiChamba</span>
+      <div class="cl-hero-wrap">
+        <div class="cl-hero-inner">
+          <div class="cl-breadcrumb">
+            <div class="cl-breadcrumb-dot"></div>
+            <span class="cl-breadcrumb-text">Mejoras · MiChamba</span>
+          </div>
+          <h1>Lo nuevo en <span class="cl-accent">MiChamba</span>.</h1>
+          <p class="cl-hero-sub">Cada viernes lanzamos mejoras.<br>Aquí encontrarás un registro de todo lo que hemos construido para ti.</p>
+        </div>
+        <div class="hero-decor" aria-hidden="true">
+          <div class="decor-card decor-card-back-2">
+            <div class="decor-card-header">
+              <div class="decor-card-icon yellow">⚡</div>
+              <div class="decor-card-title">Automatización</div>
+            </div>
+            <div class="decor-card-bar"></div>
+            <div class="decor-card-bar short"></div>
+          </div>
+          <div class="decor-card decor-card-back-1">
+            <div class="decor-card-header">
+              <div class="decor-card-icon coral">🚚</div>
+              <div class="decor-card-title">Logística</div>
+              <span class="decor-card-tag">Nuevo</span>
+            </div>
+            <div class="decor-card-bar"></div>
+            <div class="decor-card-bar short"></div>
+          </div>
+          <div class="decor-card decor-card-main">
+            <div class="decor-card-header">
+              <div class="decor-card-icon teal">📨</div>
+              <div class="decor-card-title">Reportes</div>
+              <span class="decor-card-tag">Nuevo</span>
+            </div>
+            <div class="decor-card-bar"></div>
+            <div class="decor-card-bar short"></div>
+            <div class="decor-card-progress"><div class="decor-card-progress-fill"></div></div>
+          </div>
+        </div>
       </div>
-      <h1>Lo nuevo en <span class="cl-accent">MiChamba</span>.</h1>
-      <p class="cl-hero-sub">Cada viernes lanzamos mejoras.<br>Aquí encontrarás un registro de todo lo que hemos construido para ti.</p>
     </div>
 
     <div class="cl-content">
 
       <!-- RELEASE: 17 Abr 2026 -->
-      <div class="release-section" id="apr17-2026">
+      <div class="release-section" id="17-abril-2026">
         <div class="release-header">
-          <span class="release-pill">17 de Abril de 2026 · 4 actualizaciones</span>
-          <button class="pdf-btn" onclick="printRelease('apr17-2026')"><svg width="11" height="11" viewBox="0 0 14 14" fill="none"><path d="M7 1.5v6.5m0 0L4.2 5.2M7 8l2.8-2.8M2.5 10.5v1a1 1 0 001 1h7a1 1 0 001-1v-1" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>PDF</button>
+          <div class="release-date">
+            <span class="release-date-month">Abril</span>
+            <span class="release-date-day">17</span>
+            <span class="release-date-year">2026</span>
+          </div>
+          <div class="release-meta">
+            <span class="release-meta-title">Release semanal</span>
+            <span class="release-meta-sub">4 actualizaciones nuevas</span>
+          </div>
+          <button class="pdf-btn" onclick="printRelease('17-abril-2026')"><svg width="11" height="11" viewBox="0 0 14 14" fill="none"><path d="M7 1.5v6.5m0 0L4.2 5.2M7 8l2.8-2.8M2.5 10.5v1a1 1 0 001 1h7a1 1 0 001-1v-1" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>PDF</button>
         </div>
         <div class="feature-card" style="animation-delay:0.00s">
           <div class="feature-icon icon-web">📊</div>
@@ -683,10 +1351,18 @@
       </div>
 
       <!-- RELEASE: 10 Abr 2026 -->
-      <div class="release-section" id="apr10-2026">
+      <div class="release-section" id="10-abril-2026">
         <div class="release-header">
-          <span class="release-pill">10 de Abril de 2026 · 4 actualizaciones</span>
-          <button class="pdf-btn" onclick="printRelease('apr10-2026')"><svg width="11" height="11" viewBox="0 0 14 14" fill="none"><path d="M7 1.5v6.5m0 0L4.2 5.2M7 8l2.8-2.8M2.5 10.5v1a1 1 0 001 1h7a1 1 0 001-1v-1" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>PDF</button>
+          <div class="release-date">
+            <span class="release-date-month">Abril</span>
+            <span class="release-date-day">10</span>
+            <span class="release-date-year">2026</span>
+          </div>
+          <div class="release-meta">
+            <span class="release-meta-title">Release semanal</span>
+            <span class="release-meta-sub">4 actualizaciones nuevas</span>
+          </div>
+          <button class="pdf-btn" onclick="printRelease('10-abril-2026')"><svg width="11" height="11" viewBox="0 0 14 14" fill="none"><path d="M7 1.5v6.5m0 0L4.2 5.2M7 8l2.8-2.8M2.5 10.5v1a1 1 0 001 1h7a1 1 0 001-1v-1" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>PDF</button>
         </div>
         <div class="feature-card" style="animation-delay:0.00s">
           <div class="feature-icon icon-web">👥</div>
@@ -723,10 +1399,18 @@
       </div>
 
       <!-- RELEASE: 27 Mar 2026 -->
-      <div class="release-section" id="mar27-2026">
+      <div class="release-section" id="27-marzo-2026">
         <div class="release-header">
-          <span class="release-pill">27 de Marzo de 2026 · 5 actualizaciones</span>
-          <button class="pdf-btn" onclick="printRelease('mar27-2026')"><svg width="11" height="11" viewBox="0 0 14 14" fill="none"><path d="M7 1.5v6.5m0 0L4.2 5.2M7 8l2.8-2.8M2.5 10.5v1a1 1 0 001 1h7a1 1 0 001-1v-1" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>PDF</button>
+          <div class="release-date">
+            <span class="release-date-month">Marzo</span>
+            <span class="release-date-day">27</span>
+            <span class="release-date-year">2026</span>
+          </div>
+          <div class="release-meta">
+            <span class="release-meta-title">Release semanal</span>
+            <span class="release-meta-sub">5 actualizaciones nuevas</span>
+          </div>
+          <button class="pdf-btn" onclick="printRelease('27-marzo-2026')"><svg width="11" height="11" viewBox="0 0 14 14" fill="none"><path d="M7 1.5v6.5m0 0L4.2 5.2M7 8l2.8-2.8M2.5 10.5v1a1 1 0 001 1h7a1 1 0 001-1v-1" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>PDF</button>
         </div>
         <div class="feature-card" style="animation-delay:0.00s">
           <div class="feature-icon icon-whatsapp">🔍</div>
@@ -771,10 +1455,18 @@
       </div>
 
       <!-- RELEASE: 20 Mar 2026 -->
-      <div class="release-section" id="mar20-2026">
+      <div class="release-section" id="20-marzo-2026">
         <div class="release-header">
-          <span class="release-pill">20 de Marzo de 2026 · 3 actualizaciones</span>
-          <button class="pdf-btn" onclick="printRelease('mar20-2026')"><svg width="11" height="11" viewBox="0 0 14 14" fill="none"><path d="M7 1.5v6.5m0 0L4.2 5.2M7 8l2.8-2.8M2.5 10.5v1a1 1 0 001 1h7a1 1 0 001-1v-1" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>PDF</button>
+          <div class="release-date">
+            <span class="release-date-month">Marzo</span>
+            <span class="release-date-day">20</span>
+            <span class="release-date-year">2026</span>
+          </div>
+          <div class="release-meta">
+            <span class="release-meta-title">Release semanal</span>
+            <span class="release-meta-sub">3 actualizaciones nuevas</span>
+          </div>
+          <button class="pdf-btn" onclick="printRelease('20-marzo-2026')"><svg width="11" height="11" viewBox="0 0 14 14" fill="none"><path d="M7 1.5v6.5m0 0L4.2 5.2M7 8l2.8-2.8M2.5 10.5v1a1 1 0 001 1h7a1 1 0 001-1v-1" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>PDF</button>
         </div>
         <div class="feature-card" style="animation-delay:0.00s">
           <div class="feature-icon icon-web">🎨</div>
@@ -803,10 +1495,18 @@
       </div>
 
       <!-- RELEASE: 13 Mar 2026 -->
-      <div class="release-section" id="mar13-2026">
+      <div class="release-section" id="13-marzo-2026">
         <div class="release-header">
-          <span class="release-pill">13 de Marzo de 2026 · 3 actualizaciones</span>
-          <button class="pdf-btn" onclick="printRelease('mar13-2026')"><svg width="11" height="11" viewBox="0 0 14 14" fill="none"><path d="M7 1.5v6.5m0 0L4.2 5.2M7 8l2.8-2.8M2.5 10.5v1a1 1 0 001 1h7a1 1 0 001-1v-1" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>PDF</button>
+          <div class="release-date">
+            <span class="release-date-month">Marzo</span>
+            <span class="release-date-day">13</span>
+            <span class="release-date-year">2026</span>
+          </div>
+          <div class="release-meta">
+            <span class="release-meta-title">Release semanal</span>
+            <span class="release-meta-sub">3 actualizaciones nuevas</span>
+          </div>
+          <button class="pdf-btn" onclick="printRelease('13-marzo-2026')"><svg width="11" height="11" viewBox="0 0 14 14" fill="none"><path d="M7 1.5v6.5m0 0L4.2 5.2M7 8l2.8-2.8M2.5 10.5v1a1 1 0 001 1h7a1 1 0 001-1v-1" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>PDF</button>
         </div>
         <div class="feature-card" style="animation-delay:0.00s">
           <div class="feature-icon icon-web">🔔</div>
@@ -835,10 +1535,18 @@
       </div>
 
       <!-- RELEASE: 6 Mar 2026 -->
-      <div class="release-section" id="mar06-2026">
+      <div class="release-section" id="06-marzo-2026">
         <div class="release-header">
-          <span class="release-pill">6 de Marzo de 2026 · 3 actualizaciones</span>
-          <button class="pdf-btn" onclick="printRelease('mar06-2026')"><svg width="11" height="11" viewBox="0 0 14 14" fill="none"><path d="M7 1.5v6.5m0 0L4.2 5.2M7 8l2.8-2.8M2.5 10.5v1a1 1 0 001 1h7a1 1 0 001-1v-1" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>PDF</button>
+          <div class="release-date">
+            <span class="release-date-month">Marzo</span>
+            <span class="release-date-day">06</span>
+            <span class="release-date-year">2026</span>
+          </div>
+          <div class="release-meta">
+            <span class="release-meta-title">Release semanal</span>
+            <span class="release-meta-sub">3 actualizaciones nuevas</span>
+          </div>
+          <button class="pdf-btn" onclick="printRelease('06-marzo-2026')"><svg width="11" height="11" viewBox="0 0 14 14" fill="none"><path d="M7 1.5v6.5m0 0L4.2 5.2M7 8l2.8-2.8M2.5 10.5v1a1 1 0 001 1h7a1 1 0 001-1v-1" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>PDF</button>
         </div>
         <div class="feature-card" style="animation-delay:0.00s">
           <div class="feature-icon icon-web">🔍</div>
@@ -872,63 +1580,75 @@
 </main>
 
 <script>
+  // Replay hero entrance animations when switching to a view (so they're visible).
+  // Trick: temporarily remove the animation class, force reflow, re-apply.
+  function replayHeroAnimations(viewId) {
+    const view = document.getElementById(viewId);
+    if (!view) return;
+    const animatedSelectors = [
+      '.hero-eyebrow', '.hero h1', '.hero-sub', '.hero-stats', '.hero-decor',
+      '.cl-breadcrumb', '.cl-hero h1', '.cl-hero-sub'
+    ];
+    animatedSelectors.forEach(sel => {
+      view.querySelectorAll(sel).forEach(el => {
+        const oldAnim = el.style.animation;
+        el.style.animation = 'none';
+        // Force reflow so the browser registers the change
+        void el.offsetWidth;
+        el.style.animation = '';
+      });
+    });
+  }
+
   // ── VIEW SWITCHING ──
-  // Shared primitive: used by both mobile tabs and the sidebar.
+  // Switch between Tutoriales and Changelog views.
   function switchToSection(section) {
     // Switch views
     document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
     document.getElementById('view-' + section).classList.add('active');
 
-    // Sync mobile tabs
-    document.querySelectorAll('.mobile-tab').forEach(t => t.classList.remove('active'));
-    const mobileTab = document.querySelector('.mobile-tab[data-section="' + section + '"]');
-    if (mobileTab) mobileTab.classList.add('active');
+    // Sync top bar tabs
+    document.querySelectorAll('.topbar-tab').forEach(t => t.classList.remove('active'));
+    const topTab = document.querySelector('.topbar-tab[data-section="' + section + '"]');
+    if (topTab) topTab.classList.add('active');
 
-    // Sync sidebar section headers + open state
-    document.querySelectorAll('.nav-section-header').forEach(h => h.classList.remove('active'));
-    document.querySelectorAll('.nav-section').forEach(s => s.classList.remove('open'));
-    const sidebarId = section === 'tutoriales' ? 'section-tutoriales' : 'section-changelog';
-    const sidebarSection = document.getElementById(sidebarId);
-    if (sidebarSection) {
-      sidebarSection.classList.add('open');
-      sidebarSection.querySelector('.nav-section-header').classList.add('active');
+    // Show the matching outline rail, hide the other
+    const tutOutline = document.getElementById('outline-tutoriales');
+    const cgOutline = document.getElementById('outline-changelog');
+    if (section === 'tutoriales') {
+      if (tutOutline) tutOutline.style.display = '';
+      if (cgOutline) cgOutline.style.display = 'none';
+    } else {
+      if (tutOutline) tutOutline.style.display = 'none';
+      if (cgOutline) cgOutline.style.display = '';
     }
+
+    // Replay hero animations on the view that just became active
+    replayHeroAnimations('view-' + section);
 
     // Scroll to top
     window.scrollTo({ top: 0, behavior: 'smooth' });
 
-    // Clear sub-item highlights
-    document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
-    document.querySelectorAll('.nav-release-item').forEach(i => i.classList.remove('active'));
+    // Clear outline highlights
+    document.querySelectorAll('.outline-item').forEach(i => i.classList.remove('active'));
   }
 
-  // Sidebar header handler: preserves toggle-on-same-section behavior
-  function switchSection(section, e) {
-    e.preventDefault();
-    const sectionEl = e.currentTarget.closest('.nav-section');
-    const isCurrentView = document.getElementById('view-' + section).classList.contains('active');
-
-    if (isCurrentView) {
-      sectionEl.classList.toggle('open');
-      return;
-    }
-
-    switchToSection(section);
-  }
-
-  // ── TUTORIAL SUB-NAV ──
-  function setTutorialActive(el) {
-    document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
+  // ── OUTLINE SUB-NAV ──
+  function setOutlineActive(el, section) {
+    // Clear active state only within the same outline rail
+    const rail = el.closest('.outline-rail');
+    if (rail) rail.querySelectorAll('.outline-item').forEach(i => i.classList.remove('active'));
     el.classList.add('active');
   }
 
+  // Scroll-spy for Tutoriales outline
   const modules = document.querySelectorAll('.module');
-  const tutorialNavItems = document.querySelectorAll('.nav-item');
+  const tutorialOutlineItems = document.querySelectorAll('#outline-tutoriales .outline-item');
   const tutorialObs = new IntersectionObserver(entries => {
     entries.forEach(e => {
       if (e.isIntersecting) {
         const id = e.target.id;
-        tutorialNavItems.forEach(n => {
+        tutorialOutlineItems.forEach(n => {
           n.classList.remove('active');
           if (n.getAttribute('href') === '#' + id) n.classList.add('active');
         });
@@ -937,36 +1657,93 @@
   }, { threshold: 0.35 });
   modules.forEach(m => tutorialObs.observe(m));
 
-  // ── CHANGELOG SUB-NAV ──
-  function setReleaseActive(el) {
-    document.querySelectorAll('.nav-release-item').forEach(i => i.classList.remove('active'));
-    el.classList.add('active');
-  }
-
-  function toggleMonth(labelEl) {
-    const monthEl = labelEl.closest('.nav-month');
-    if (monthEl) monthEl.classList.toggle('open');
-  }
-
+  // Scroll-spy for Changelog outline
   const releases = document.querySelectorAll('.release-section');
-  const releaseNavItems = document.querySelectorAll('.nav-release-item');
+  const releaseOutlineItems = document.querySelectorAll('#outline-changelog .outline-item');
   const releaseObs = new IntersectionObserver(entries => {
     entries.forEach(e => {
       if (e.isIntersecting) {
         const id = e.target.id;
-        releaseNavItems.forEach(n => {
+        releaseOutlineItems.forEach(n => {
           n.classList.remove('active');
-          if (n.getAttribute('href') === '#' + id) {
-            n.classList.add('active');
-            // Auto-open parent month if collapsed so the active highlight is visible
-            const parentMonth = n.closest('.nav-month');
-            if (parentMonth) parentMonth.classList.add('open');
-          }
+          if (n.getAttribute('href') === '#' + id) n.classList.add('active');
         });
       }
     });
   }, { threshold: 0.3 });
   releases.forEach(r => releaseObs.observe(r));
+
+  // ── SEARCH ──
+  // Filters cards inside their parent sections. Hides empty parents during active search,
+  // and dims the matching outline rail items so the user knows nothing matched there.
+  function setupSearch(railId, viewId, parentSelector, cardSelector, searchableSelectors) {
+    const searchEl = document.querySelector('#' + railId + ' .outline-search');
+    if (!searchEl) return;
+    const input = searchEl.querySelector('.outline-search-input');
+    const clearBtn = searchEl.querySelector('.outline-search-clear');
+
+    function performSearch() {
+      const query = input.value.trim().toLowerCase();
+      searchEl.classList.toggle('has-value', !!query);
+
+      const view = document.getElementById(viewId);
+      const parents = view.querySelectorAll(parentSelector);
+
+      parents.forEach(parent => {
+        const cards = parent.querySelectorAll(cardSelector);
+        let visibleCount = 0;
+        cards.forEach(card => {
+          const text = searchableSelectors.map(sel => {
+            const el = card.querySelector(sel);
+            return el ? el.textContent.toLowerCase() : '';
+          }).join(' ');
+          const matches = !query || text.includes(query);
+          card.style.display = matches ? '' : 'none';
+          if (matches) visibleCount++;
+        });
+
+        // Hide parent when search is active and no cards match (also hides modules with 0 videos)
+        const hideParent = !!query && visibleCount === 0;
+        parent.style.display = hideParent ? 'none' : '';
+
+        // Update outline rail item state
+        const parentId = parent.id;
+        if (parentId) {
+          const outlineItem = document.querySelector('#' + railId + ' [href="#' + parentId + '"]');
+          if (outlineItem) outlineItem.classList.toggle('empty', hideParent);
+        }
+      });
+    }
+
+    input.addEventListener('input', performSearch);
+    clearBtn.addEventListener('click', () => {
+      input.value = '';
+      performSearch();
+      input.focus();
+    });
+    // Allow Esc to clear
+    input.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && input.value) {
+        input.value = '';
+        performSearch();
+      }
+    });
+  }
+
+  setupSearch(
+    'outline-tutoriales',
+    'view-tutoriales',
+    '.module',
+    '.video-card',
+    ['.video-title', '.video-desc']
+  );
+  setupSearch(
+    'outline-changelog',
+    'view-changelog',
+    '.release-section',
+    '.feature-card',
+    ['.feature-title', '.feature-desc']
+  );
 
   // ── PDF PRINT ──
   function printRelease(id) {
@@ -979,7 +1756,7 @@
   }
 
   // ── DEEP LINKING ──
-  // Handle URL hashes like #mar20-2026 that live inside the changelog view.
+  // Handle URL hashes like #20-marzo-2026 that live inside the changelog view.
   // Without this, the browser can't scroll to elements inside display:none views.
   function handleHash() {
     const hash = window.location.hash;
@@ -1001,32 +1778,29 @@
       document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
       parentView.classList.add('active');
 
-      // Sync mobile tabs
-      document.querySelectorAll('.mobile-tab').forEach(t => t.classList.remove('active'));
-      const mobileTab = document.querySelector('.mobile-tab[data-section="' + targetSection + '"]');
-      if (mobileTab) mobileTab.classList.add('active');
+      // Sync top bar tabs
+      document.querySelectorAll('.topbar-tab').forEach(t => t.classList.remove('active'));
+      const topTab = document.querySelector('.topbar-tab[data-section="' + targetSection + '"]');
+      if (topTab) topTab.classList.add('active');
 
-      // Sync sidebar section headers + open state
-      document.querySelectorAll('.nav-section-header').forEach(h => h.classList.remove('active'));
-      document.querySelectorAll('.nav-section').forEach(s => s.classList.remove('open'));
-      const sidebarId = targetSection === 'tutoriales' ? 'section-tutoriales' : 'section-changelog';
-      const sidebarSection = document.getElementById(sidebarId);
-      if (sidebarSection) {
-        sidebarSection.classList.add('open');
-        sidebarSection.querySelector('.nav-section-header').classList.add('active');
+      // Show the matching outline rail
+      const tutOutline = document.getElementById('outline-tutoriales');
+      const cgOutline = document.getElementById('outline-changelog');
+      if (targetSection === 'tutoriales') {
+        if (tutOutline) tutOutline.style.display = '';
+        if (cgOutline) cgOutline.style.display = 'none';
+      } else {
+        if (tutOutline) tutOutline.style.display = 'none';
+        if (cgOutline) cgOutline.style.display = '';
       }
     }
 
-    // Highlight sidebar item + auto-expand month if needed
-    const navItem = document.querySelector('[href="' + hash + '"]');
-    if (navItem) {
-      if (navItem.classList.contains('nav-release-item')) {
-        setReleaseActive(navItem);
-        const parentMonth = navItem.closest('.nav-month');
-        if (parentMonth) parentMonth.classList.add('open');
-      } else if (navItem.classList.contains('nav-item')) {
-        setTutorialActive(navItem);
-      }
+    // Highlight matching outline item
+    const outlineItem = document.querySelector('.outline-rail [href="' + hash + '"]');
+    if (outlineItem) {
+      const rail = outlineItem.closest('.outline-rail');
+      if (rail) rail.querySelectorAll('.outline-item').forEach(i => i.classList.remove('active'));
+      outlineItem.classList.add('active');
     }
 
     // Jump instantly to the target (no smooth animation — user is arriving, not scrolling)
