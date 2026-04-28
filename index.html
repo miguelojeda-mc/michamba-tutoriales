@@ -790,17 +790,25 @@
     .release-section:nth-of-type(5) .release-date-month { color: #178a72; }
     .release-section:nth-of-type(6) .release-date-month { color: #b8861f; }
 
-    /* Calendar-style date tile — gray surface (now sitting on white container) */
+    /* Calendar-style date tile — white fill + colored border (rotates per release, see below) */
     .release-date {
       display: flex; flex-direction: column; align-items: center; justify-content: center;
       width: 72px;
       flex-shrink: 0;
-      background: var(--surface);
+      background: var(--bg);
       border: 1px solid var(--border);
       border-radius: 10px;
       padding: 7px 6px 9px;
       box-shadow: var(--shadow-sm);
+      transition: border-color 0.3s ease;
     }
+    /* Rotating colored border — matches the release-header border-left + month color */
+    .release-section:nth-of-type(1) .release-date { border-color: rgba(242,115,91,0.7); }
+    .release-section:nth-of-type(2) .release-date { border-color: rgba(34,203,173,0.7); }
+    .release-section:nth-of-type(3) .release-date { border-color: rgba(247,192,68,0.85); }
+    .release-section:nth-of-type(4) .release-date { border-color: rgba(242,115,91,0.7); }
+    .release-section:nth-of-type(5) .release-date { border-color: rgba(34,203,173,0.7); }
+    .release-section:nth-of-type(6) .release-date { border-color: rgba(247,192,68,0.85); }
     .release-date-month {
       font-size: 9px; font-weight: 800;
       text-transform: uppercase;
@@ -883,9 +891,9 @@
     .feature-icon.icon-whatsapp  { background: linear-gradient(135deg, rgba(34,203,173,0.18), rgba(34,203,173,0.08));   border-color: rgba(34,203,173,0.25); }
     .feature-icon.icon-logistica { background: linear-gradient(135deg, rgba(220,38,38,0.16), rgba(220,38,38,0.06));    border-color: rgba(220,38,38,0.22); }
     .feature-body { flex: 1; min-width: 0; }
-    .feature-header { display: flex; align-items: center; flex-wrap: wrap; gap: 10px; margin-bottom: 7px; }
+    .feature-header { display: flex; align-items: center; flex-wrap: wrap; gap: 10px; margin-bottom: 9px; }
     .feature-title { font-size: 13.5px; font-weight: 800; color: var(--text); letter-spacing: -0.1px; line-height: 1.35; }
-    .feature-desc { font-size: 12.5px; font-weight: 500; color: var(--text-2); line-height: 1.65; margin-bottom: 10px; padding-top: 7px; border-top: 1px solid var(--border); }
+    .feature-desc { font-size: 12.5px; font-weight: 500; color: var(--text-2); line-height: 1.65; margin-bottom: 10px; }
     .feature-tags { display: flex; flex-wrap: wrap; gap: 6px; }
     .loom-btn {
       display: inline-flex; align-items: center; gap: 5px;
