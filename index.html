@@ -4,6 +4,8 @@
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>MiChamba — Centro de Recursos</title>
+  <link rel="icon" type="image/png" href="favicon.png"/>
+  <link rel="apple-touch-icon" href="favicon.png"/>
   <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700;800;900&display=swap" rel="stylesheet"/>
   <style>
     :root {
@@ -87,6 +89,7 @@
     .topbar-logo-wrap {
       width: 38px; height: 38px;
       border-radius: 12px;
+      background: var(--dark);
       display: flex;
       align-items: center;
       justify-content: center;
@@ -754,25 +757,45 @@
     .cl-hero-inner { position: relative; z-index: 2; max-width: 600px; }
     .cl-content { padding: 8px 36px 80px; }
 
-    /* Release sections */
+    /* Release sections — white containers matching the module pattern */
     .release-section {
-      background: var(--surface);
+      background: var(--bg);
       border-radius: var(--r-lg);
-      padding: 24px 26px 26px;
+      padding: 28px 28px 32px;
       margin-bottom: 16px;
       scroll-margin-top: 90px;
       box-shadow: var(--shadow-md);
       transition: box-shadow 0.3s ease;
     }
     .release-section:hover { box-shadow: var(--shadow-lg); }
-    .release-header { display: flex; align-items: center; gap: 14px; margin-bottom: 22px; padding-bottom: 16px; border-bottom: 1px solid var(--border); }
+    .release-header {
+      display: flex; align-items: center; gap: 14px;
+      margin-bottom: 22px;
+      padding: 0 0 0 12px;
+      border-left: 3px solid var(--border);
+      transition: border-color 0.3s ease;
+    }
+    /* Rotating accent — matches the module color pattern */
+    .release-section:nth-of-type(1) .release-header { border-left-color: var(--coral); }
+    .release-section:nth-of-type(2) .release-header { border-left-color: var(--teal); }
+    .release-section:nth-of-type(3) .release-header { border-left-color: var(--yellow); }
+    .release-section:nth-of-type(4) .release-header { border-left-color: var(--coral); }
+    .release-section:nth-of-type(5) .release-header { border-left-color: var(--teal); }
+    .release-section:nth-of-type(6) .release-header { border-left-color: var(--yellow); }
+    /* Calendar tile month color rotates to match the border accent */
+    .release-section:nth-of-type(1) .release-date-month { color: var(--coral); }
+    .release-section:nth-of-type(2) .release-date-month { color: #178a72; }
+    .release-section:nth-of-type(3) .release-date-month { color: #b8861f; }
+    .release-section:nth-of-type(4) .release-date-month { color: var(--coral); }
+    .release-section:nth-of-type(5) .release-date-month { color: #178a72; }
+    .release-section:nth-of-type(6) .release-date-month { color: #b8861f; }
 
-    /* Calendar-style date tile */
+    /* Calendar-style date tile — gray surface (now sitting on white container) */
     .release-date {
       display: flex; flex-direction: column; align-items: center; justify-content: center;
       width: 72px;
       flex-shrink: 0;
-      background: var(--bg);
+      background: var(--surface);
       border: 1px solid var(--border);
       border-radius: 10px;
       padding: 7px 6px 9px;
@@ -780,7 +803,6 @@
     }
     .release-date-month {
       font-size: 9px; font-weight: 800;
-      color: var(--coral);
       text-transform: uppercase;
       letter-spacing: 0.8px;
       line-height: 1;
@@ -829,18 +851,21 @@
     /* Feature cards */
     .feature-card {
       display: flex; align-items: flex-start; gap: 14px;
-      background: var(--bg);
+      background: var(--surface);
+      border: 1px solid var(--border);
       border-radius: var(--r);
       padding: 16px 18px;
       margin-bottom: 10px;
-      box-shadow: var(--shadow-sm);
-      transition: transform 0.3s cubic-bezier(.34,1.56,.64,1), box-shadow 0.3s ease;
+      box-shadow: none;
+      transition: transform 0.3s cubic-bezier(.34,1.56,.64,1), box-shadow 0.3s ease, border-color 0.3s ease;
       animation: cardIn 0.4s cubic-bezier(.16,1,.3,1) both;
     }
     @keyframes cardIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
     .feature-card:hover {
       transform: translateY(-3px);
-      box-shadow: var(--shadow-lg);
+      background: var(--bg);
+      border-color: var(--border-dark);
+      box-shadow: var(--shadow-md);
     }
     .feature-icon {
       width: 40px; height: 40px;
@@ -995,7 +1020,12 @@
         box-shadow: none !important;
         padding: 0 !important;
       }
-      body.printing-single .release-header { border-bottom: 1px solid #e4e4e1; margin-bottom: 14px; padding-bottom: 12px; }
+      body.printing-single .release-header {
+        border-bottom: 1px solid #e4e4e1;
+        margin-bottom: 14px;
+        padding: 0 0 12px 0 !important;
+        border-left: none !important;
+      }
       body.printing-single .release-date { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
       body.printing-single .feature-card { break-inside: avoid; box-shadow: none !important; border: 1px solid #d0d0cc !important; background: #fff !important; transform: none !important; animation: none !important; margin-bottom: 8px !important; }
       body.printing-single .feature-icon { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
@@ -1082,9 +1112,23 @@
   </div>
   <div class="outline-list">
     <!--
-      ⚠️ AL AGREGAR UN NUEVO MES:
-      1. El nuevo <div class="outline-month"> va antes de los releases del mes.
-      2. Los releases nuevos van al inicio (cronológico inverso).
+      ⚠️ AL AGREGAR UN NUEVO RELEASE EN EL RAIL:
+
+      1. El nuevo <a class="outline-item"> va al INICIO del mes correspondiente
+         (los más recientes arriba — orden cronológico inverso).
+
+      2. El href debe coincidir con el id del release abajo.
+         Formato: href="#DD-mes-YYYY" (ej. "#24-abril-2026")
+
+      3. Si es un mes nuevo, agregar primero <div class="outline-month">
+         con el nombre del mes en español. Ejemplo:
+            <div class="outline-month">Mayo 2026</div>
+
+      4. El label muestra "DD Mes" (mes completo en español).
+         Ejemplo: "24 Abril", "01 Mayo", "15 Septiembre".
+
+      5. NO te preocupes por el color del dot — rota automáticamente
+         con el release abajo. Ver instrucciones en el bloque del cl-content.
     -->
     <div class="outline-month">Abril 2026</div>
     <a href="#17-abril-2026" class="outline-item" onclick="setOutlineActive(this, 'changelog')">
@@ -1302,7 +1346,62 @@
 
     <div class="cl-content">
 
-      <!-- RELEASE: 17 Abr 2026 -->
+      <!--
+        ═══════════════════════════════════════════════════════════════════════
+        📝 CÓMO AGREGAR UN NUEVO RELEASE (cada viernes)
+        ═══════════════════════════════════════════════════════════════════════
+
+        1️⃣  POSICIÓN
+            El nuevo release SIEMPRE va al INICIO de este div class="cl-content",
+            justo debajo de este comentario. Los releases están en orden
+            cronológico inverso (el más reciente arriba).
+
+        2️⃣  ID / SLUG (URL compartible)
+            Formato: id="DD-mes-YYYY" (en minúsculas, mes en español completo)
+            Ejemplos:
+              · "24-abril-2026"
+              · "01-mayo-2026"
+              · "15-septiembre-2026"
+            Esto se convierte en la URL: https://tu-dominio.com/#24-abril-2026
+
+        3️⃣  COLOR DE ACENTO (border-left + mes del calendar)
+            ⚠️ NO se asigna manualmente — rota automáticamente por posición:
+              Posición 1 → coral 🟠
+              Posición 2 → teal 🟢
+              Posición 3 → yellow 🟡
+              Posición 4 → coral (se cicla cada 3)
+              ...
+            Como el nuevo release siempre va en posición 1, será coral.
+            Los demás se desplazan una posición y "cambian de color".
+            Esto es intencional — el más reciente siempre destaca con el
+            color cálido de la marca. No requiere mantenimiento manual.
+
+        4️⃣  ESTRUCTURA DEL BLOQUE
+            Copia el bloque del release más reciente como template y modifica:
+              · El comentario de header del bloque (RELEASE: dia mes año)
+              · id="..." y onclick="printRelease('...')" (deben coincidir)
+              · El calendar tile: mes (Abril/Mayo/etc.) + día + año
+              · El número de actualizaciones en .release-meta-sub
+              · Las feature cards adentro (con animation-delay incremental:
+                0.00s, 0.07s, 0.14s, 0.21s...)
+
+        5️⃣  OUTLINE RAIL (sub-nav derecho)
+            También hay que agregar el item correspondiente en el rail
+            de la derecha (busca aside id="outline-changelog"). Si es un
+            mes nuevo, agregar también el separador div class="outline-month".
+
+        6️⃣  EMOJIS DE FEATURES
+            Elegir según funcionalidad, NO plataforma. NO repetir el mismo
+            emoji en un mismo release. Guía rápida:
+              📅 Calendario · 🔔 Notificaciones · 👥 Personas/Equipo
+              🎥 Videos · 🔍 Búsqueda · 📊 Métricas/Reportes
+              📨 Envío de mensajes · ✅ Tareas · 🗂️ Carpetas
+              💬 WhatsApp · ⚡ Automatización · 🎨 Diseño/UI
+              🚚 Logística · ⚙️ Configuración · ✍️ Firma · 📍 Ubicación
+        ═══════════════════════════════════════════════════════════════════════
+      -->
+
+      <!-- RELEASE: 17 Abril 2026 -->
       <div class="release-section" id="17-abril-2026">
         <div class="release-header">
           <div class="release-date">
@@ -1350,7 +1449,7 @@
         </div>
       </div>
 
-      <!-- RELEASE: 10 Abr 2026 -->
+      <!-- RELEASE: 10 Abril 2026 -->
       <div class="release-section" id="10-abril-2026">
         <div class="release-header">
           <div class="release-date">
@@ -1398,7 +1497,7 @@
         </div>
       </div>
 
-      <!-- RELEASE: 27 Mar 2026 -->
+      <!-- RELEASE: 27 Marzo 2026 -->
       <div class="release-section" id="27-marzo-2026">
         <div class="release-header">
           <div class="release-date">
@@ -1454,7 +1553,7 @@
         </div>
       </div>
 
-      <!-- RELEASE: 20 Mar 2026 -->
+      <!-- RELEASE: 20 Marzo 2026 -->
       <div class="release-section" id="20-marzo-2026">
         <div class="release-header">
           <div class="release-date">
@@ -1494,7 +1593,7 @@
         </div>
       </div>
 
-      <!-- RELEASE: 13 Mar 2026 -->
+      <!-- RELEASE: 13 Marzo 2026 -->
       <div class="release-section" id="13-marzo-2026">
         <div class="release-header">
           <div class="release-date">
@@ -1534,7 +1633,7 @@
         </div>
       </div>
 
-      <!-- RELEASE: 6 Mar 2026 -->
+      <!-- RELEASE: 06 Marzo 2026 -->
       <div class="release-section" id="06-marzo-2026">
         <div class="release-header">
           <div class="release-date">
