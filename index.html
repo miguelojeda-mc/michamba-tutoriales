@@ -206,6 +206,33 @@
     .topbar-tab:hover .topbar-tab-emoji { transform: scale(1.1) rotate(-3deg); }
     .topbar-tab.active .topbar-tab-emoji { transform: scale(1.05); }
 
+    /* Notification dot — red bubble at the top-right corner of a tab.
+       Used to highlight unvisited sections. Pulses gently to draw attention.
+       Hidden via .seen class once user clicks the tab (controlled by JS + localStorage). */
+    .topbar-tab-notif {
+      position: absolute;
+      top: 6px;
+      right: 8px;
+      width: 9px;
+      height: 9px;
+      border-radius: 50%;
+      background: #ef4444;
+      border: 1.5px solid var(--dark);
+      box-shadow: 0 0 0 0 rgba(239,68,68,0.6);
+      animation: notifPulse 1.8s ease-in-out infinite;
+      pointer-events: none;
+      transition: opacity 0.4s ease, transform 0.4s ease;
+    }
+    .topbar-tab.seen .topbar-tab-notif {
+      opacity: 0;
+      transform: scale(0.4);
+      animation: none;
+    }
+    @keyframes notifPulse {
+      0%,100% { box-shadow: 0 0 0 0 rgba(239,68,68,0.55); }
+      50%      { box-shadow: 0 0 0 5px rgba(239,68,68,0); }
+    }
+
     .topbar-cta {
       display: inline-flex;
       align-items: center;
@@ -1048,7 +1075,7 @@
 <!-- TOP BAR -->
 <header class="topbar">
   <div class="topbar-inner">
-    <a href="#" class="topbar-brand" onclick="switchToSection('tutoriales');return false;">
+    <a href="#" class="topbar-brand" onclick="switchToSection('changelog');return false;">
       <div class="topbar-logo-wrap">
         <img src="logo.png" alt="MiChamba" class="topbar-logo-img"/>
       </div>
@@ -1059,15 +1086,16 @@
     </a>
 
     <nav class="topbar-tabs">
-      <button class="topbar-tab active" data-section="tutoriales" onclick="switchToSection('tutoriales')">
-        <span class="topbar-tab-dot"></span>
-        <span class="topbar-tab-emoji">🎓</span>
-        <span>Videos Tutoriales</span>
-      </button>
-      <button class="topbar-tab" data-section="changelog" onclick="switchToSection('changelog')">
+      <button class="topbar-tab active" data-section="changelog" onclick="switchToSection('changelog')">
         <span class="topbar-tab-dot"></span>
         <span class="topbar-tab-emoji">📋</span>
         <span>Mejoras Implementadas</span>
+      </button>
+      <button class="topbar-tab" data-section="tutoriales" onclick="switchToSection('tutoriales')">
+        <span class="topbar-tab-dot"></span>
+        <span class="topbar-tab-emoji">🎓</span>
+        <span>Videos Tutoriales</span>
+        <span class="topbar-tab-notif" aria-label="Sección con contenido nuevo"></span>
       </button>
     </nav>
 
@@ -1078,8 +1106,8 @@
   </div>
 </header>
 
-<!-- OUTLINE RAIL: Tutoriales -->
-<aside class="outline-rail" id="outline-tutoriales">
+<!-- OUTLINE RAIL: Tutoriales (hidden by default; shown when tutoriales view is active) -->
+<aside class="outline-rail" id="outline-tutoriales" style="display:none;">
   <span class="outline-eyebrow">En esta página</span>
   <div class="outline-search">
     <svg class="outline-search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
@@ -1110,8 +1138,8 @@
   </div>
 </aside>
 
-<!-- OUTLINE RAIL: Changelog (hidden by default; shown when changelog view is active) -->
-<aside class="outline-rail" id="outline-changelog" style="display:none;">
+<!-- OUTLINE RAIL: Changelog (default visible — Mejoras is the landing view) -->
+<aside class="outline-rail" id="outline-changelog">
   <span class="outline-eyebrow">Releases</span>
   <div class="outline-search">
     <svg class="outline-search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
@@ -1139,6 +1167,10 @@
          con el release abajo. Ver instrucciones en el bloque del cl-content.
     -->
     <div class="outline-month">Abril 2026</div>
+    <a href="#24-abril-2026" class="outline-item" onclick="setOutlineActive(this, 'changelog')">
+      <span class="outline-dot"></span>
+      <span class="outline-label">24 Abril</span>
+    </a>
     <a href="#17-abril-2026" class="outline-item" onclick="setOutlineActive(this, 'changelog')">
       <span class="outline-dot"></span>
       <span class="outline-label">17 Abril</span>
@@ -1178,7 +1210,7 @@
   </div>
 
   <!-- ── TUTORIALES VIEW ── -->
-  <div class="view active" id="view-tutoriales">
+  <div class="view" id="view-tutoriales">
     <section class="hero">
       <div class="hero-inner-wrap">
         <div class="orb orb-1"></div><div class="orb orb-2"></div>
@@ -1309,7 +1341,7 @@
   </div><!-- end view-tutoriales -->
 
   <!-- ── CHANGELOG VIEW ── -->
-  <div class="view" id="view-changelog">
+  <div class="view active" id="view-changelog">
     <div class="cl-hero">
       <div class="cl-hero-wrap">
         <div class="cl-hero-inner">
@@ -1408,6 +1440,46 @@
               🚚 Logística · ⚙️ Configuración · ✍️ Firma · 📍 Ubicación
         ═══════════════════════════════════════════════════════════════════════
       -->
+
+      <!-- RELEASE: 24 Abril 2026 -->
+      <div class="release-section" id="24-abril-2026">
+        <div class="release-header">
+          <div class="release-date">
+            <span class="release-date-month">Abril</span>
+            <span class="release-date-day">24</span>
+            <span class="release-date-year">2026</span>
+          </div>
+          <div class="release-meta">
+            <span class="release-meta-title">Release semanal</span>
+            <span class="release-meta-sub">3 actualizaciones nuevas</span>
+          </div>
+          <button class="pdf-btn" onclick="printRelease('24-abril-2026')"><svg width="11" height="11" viewBox="0 0 14 14" fill="none"><path d="M7 1.5v6.5m0 0L4.2 5.2M7 8l2.8-2.8M2.5 10.5v1a1 1 0 001 1h7a1 1 0 001-1v-1" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>PDF</button>
+        </div>
+        <div class="feature-card" style="animation-delay:0.00s">
+          <div class="feature-icon icon-web">🎨</div>
+          <div class="feature-body">
+            <div class="feature-header"><span class="feature-title">Calendario: leyenda de colores por tipo de tareas</span><a href="https://www.loom.com/share/85160e9aa5964b808f55fa414c9a99bd" target="_blank" class="loom-btn">▶ Ver video explicativo</a></div>
+            <p class="feature-desc">Identifica el estado de cada tarea por su color. La leyenda en la barra superior te dice qué significa cada uno.</p>
+            <div class="feature-tags"><span class="tag tag-teal">Web</span></div>
+          </div>
+        </div>
+        <div class="feature-card" style="animation-delay:0.07s">
+          <div class="feature-icon icon-web">🔍</div>
+          <div class="feature-body">
+            <div class="feature-header"><span class="feature-title">Página de inicio: buscador en panel de carpetas</span><a href="https://www.loom.com/share/5e52d2da796a4fc19e8a59c4f51736e3" target="_blank" class="loom-btn">▶ Ver video explicativo</a></div>
+            <p class="feature-desc">Busca carpetas directamente desde el panel lateral. Escribe el nombre y la lista se filtra al instante, sin hacer scroll.</p>
+            <div class="feature-tags"><span class="tag tag-teal">Web</span></div>
+          </div>
+        </div>
+        <div class="feature-card" style="animation-delay:0.14s">
+          <div class="feature-icon icon-web">🔔</div>
+          <div class="feature-body">
+            <div class="feature-header"><span class="feature-title">Tareas: alerta al asignar tareas fuera del horario laboral</span><a href="https://www.loom.com/share/41ccedd8bd0e42a388e4ce2d0ce9e363" target="_blank" class="loom-btn">▶ Ver video explicativo</a></div>
+            <p class="feature-desc">Recibe una alerta cuando asignes tareas fuera del horario laboral del usuario. Evita confusiones antes de que ocurran.</p>
+            <div class="feature-tags"><span class="tag tag-teal">Web</span></div>
+          </div>
+        </div>
+      </div>
 
       <!-- RELEASE: 17 Abril 2026 -->
       <div class="release-section" id="17-abril-2026">
@@ -1707,11 +1779,51 @@
     });
   }
 
+  // ── NOTIFICATION DOT (Tutoriales section) ──
+  // Shows a red dot on the Tutoriales tab until the user visits it for the first time.
+  // Persisted in localStorage so it stays "seen" across sessions.
+  // To re-show the dot for all users (e.g. after a major content update), bump the key version.
+  const NOTIF_STORAGE_KEY = 'mc-tutoriales-seen-v1';
+
+  function applyNotifState() {
+    const tutTab = document.querySelector('.topbar-tab[data-section="tutoriales"]');
+    if (!tutTab) return;
+    let seen = false;
+    try {
+      seen = localStorage.getItem(NOTIF_STORAGE_KEY) === '1';
+    } catch (e) {
+      // localStorage may be disabled in private browsing — fail silently, dot stays visible
+    }
+    tutTab.classList.toggle('seen', seen);
+  }
+
+  function markTutorialesSeen() {
+    try {
+      localStorage.setItem(NOTIF_STORAGE_KEY, '1');
+    } catch (e) {
+      // Ignore storage errors (private mode, quota, etc.)
+    }
+    const tutTab = document.querySelector('.topbar-tab[data-section="tutoriales"]');
+    if (tutTab) tutTab.classList.add('seen');
+  }
+
+  // Apply state on initial load
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', applyNotifState);
+  } else {
+    applyNotifState();
+  }
+
   // ── VIEW SWITCHING ──
   // Switch between Tutoriales and Changelog views.
   // `fromHash` = true means this was triggered by a hash change (deep-link), so we keep the hash.
   // Otherwise, we clear the hash so the URL stays clean and matches the current view.
   function switchToSection(section, fromHash) {
+    // If user is visiting Tutoriales, mark the notification dot as seen
+    if (section === 'tutoriales') {
+      markTutorialesSeen();
+    }
+
     // Switch views
     document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
     document.getElementById('view-' + section).classList.add('active');
@@ -1887,6 +1999,11 @@
     const targetSection = parentView.id === 'view-changelog' ? 'changelog' : 'tutoriales';
     const currentlyActive = document.querySelector('.view.active');
     const needsViewSwitch = !currentlyActive || currentlyActive.id !== parentView.id;
+
+    // If user deep-linked into Tutoriales, mark the notification dot as seen
+    if (targetSection === 'tutoriales') {
+      markTutorialesSeen();
+    }
 
     // If we need to switch views, do it WITHOUT the scroll-to-top (which would fight our scroll-to-target)
     if (needsViewSwitch) {
