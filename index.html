@@ -678,11 +678,57 @@
       cursor: pointer;
       box-shadow: var(--shadow-sm);
       transition: transform 0.3s cubic-bezier(.34,1.56,.64,1), box-shadow 0.3s ease;
+      position: relative;
+      display: flex;
+      flex-direction: column;
     }
     .video-card:hover {
       transform: translateY(-5px);
       box-shadow: var(--shadow-lg);
     }
+
+    /*
+      ═══════════════════════════════════════════════════════════════════
+      🎨 BORDES DE COLOR POR MÓDULO
+      ═══════════════════════════════════════════════════════════════════
+      Cada módulo tiene su propio color de border, siguiendo el mismo
+      sistema de rotación que usamos en el changelog (coral/teal/yellow).
+
+      📋 ASIGNACIÓN ACTUAL:
+        Módulo 1 (Presentación)        → Coral 🟠
+        Módulo 2 (Creaciones)          → Teal 🟢
+        Módulo 3 (Gestión de Tareas)   → Yellow 🟡
+        Módulo 4 (La Plataforma)       → Coral 🟠 (cicla)
+        Módulo 5 (WhatsApp)            → Teal 🟢 (cicla)
+
+      ➕ AL AGREGAR UN NUEVO MÓDULO (mod-6, mod-7, etc.):
+         1. Sigue la rotación: 1→coral, 2→teal, 3→yellow, repetir.
+            mod-6 sería yellow, mod-7 coral, mod-8 teal, etc.
+         2. Copia el bloque de mod-1, mod-2, o mod-3 según corresponda
+            y cambia solo el número de módulo en el selector.
+         3. La opacidad varía por color porque visualmente "pesan" distinto:
+              · Coral / Teal: 0.35 base, 0.55 hover
+              · Yellow: 0.50 base, 0.70 hover (necesita más para verse)
+
+      🔄 PARA REASIGNAR UN COLOR:
+         Solo cambia los rgba() en las líneas correspondientes al módulo.
+         Colores de la marca:
+           Coral:  rgba(242,115,91, X)
+           Teal:   rgba(34,203,173, X)
+           Yellow: rgba(247,192,68, X)
+      ═══════════════════════════════════════════════════════════════════
+    */
+    .mod-1 .video-card { box-shadow: 0 0 0 1px rgba(242,115,91,0.35), var(--shadow-sm); }
+    .mod-1 .video-card:hover { box-shadow: 0 0 0 1px rgba(242,115,91,0.55), var(--shadow-lg); }
+    .mod-2 .video-card { box-shadow: 0 0 0 1px rgba(34,203,173,0.40), var(--shadow-sm); }
+    .mod-2 .video-card:hover { box-shadow: 0 0 0 1px rgba(34,203,173,0.60), var(--shadow-lg); }
+    .mod-3 .video-card { box-shadow: 0 0 0 1px rgba(247,192,68,0.50), var(--shadow-sm); }
+    .mod-3 .video-card:hover { box-shadow: 0 0 0 1px rgba(247,192,68,0.70), var(--shadow-lg); }
+    .mod-4 .video-card { box-shadow: 0 0 0 1px rgba(242,115,91,0.35), var(--shadow-sm); }
+    .mod-4 .video-card:hover { box-shadow: 0 0 0 1px rgba(242,115,91,0.55), var(--shadow-lg); }
+    .mod-5 .video-card { box-shadow: 0 0 0 1px rgba(34,203,173,0.40), var(--shadow-sm); }
+    .mod-5 .video-card:hover { box-shadow: 0 0 0 1px rgba(34,203,173,0.60), var(--shadow-lg); }
+
     .video-thumb { width: 100%; padding-top: 56.25%; position: relative; background: var(--dark); overflow: hidden; }
     .video-thumb iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: none; transition: transform 0.4s ease; }
     .video-card:hover .video-thumb iframe { transform: scale(1.02); }
@@ -711,8 +757,38 @@
       padding: 2px 6px; border-radius: 5px;
       border: 1px solid rgba(255,255,255,0.1);
     }
-    .video-body { padding: 10px 12px 12px; background: var(--bg); }
-    .video-tag { font-size: 7.5px; font-weight: 800; letter-spacing: 0.5px; text-transform: uppercase; padding: 2px 7px; border-radius: 100px; display: inline-block; margin-top: 6px; margin-bottom: 0; }
+
+    /* MEJORA A — Difficulty tag overlaid on thumbnail (top-left corner).
+       Glassmorphism style: semi-transparent backdrop + colored text per difficulty. */
+    .difficulty-overlay {
+      position: absolute;
+      top: 7px; left: 7px;
+      font-size: 8.5px;
+      font-weight: 800;
+      letter-spacing: 0.6px;
+      text-transform: uppercase;
+      padding: 3px 8px;
+      border-radius: 100px;
+      backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+      background: rgba(255,255,255,0.85);
+      border: 1px solid rgba(255,255,255,0.5);
+      z-index: 2;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+    }
+    .difficulty-overlay.tag-basico         { color: #0e7159; }
+    .difficulty-overlay.tag-intermedio     { color: #8a6200; }
+    .difficulty-overlay.tag-avanzado       { color: #c0432a; }
+    .difficulty-overlay.tag-administracion { color: #0f3a2e; }
+    .difficulty-overlay.tag-campo          { color: #0f3a2e; }
+    .difficulty-overlay.tag-general        { color: #0f3a2e; }
+
+    .video-body {
+      padding: 10px 12px 12px;
+      background: var(--bg);
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+    }
     .video-title { font-size: 12.5px; font-weight: 800; color: var(--text); line-height: 1.35; margin-bottom: 3px; letter-spacing: -0.05px; }
     .video-desc  { font-size: 10.5px; color: var(--text-2); line-height: 1.5; }
 
@@ -923,20 +999,46 @@
     .feature-desc { font-size: 12.5px; font-weight: 500; color: var(--text-2); line-height: 1.65; margin-bottom: 10px; }
     .feature-tags { display: flex; flex-wrap: wrap; gap: 6px; }
     .loom-btn {
-      display: inline-flex; align-items: center; gap: 5px;
-      font-size: 10.5px; font-weight: 700; color: #178a72;
-      background: rgba(34,203,173,0.10);
-      border: 1px solid rgba(34,203,173,0.25);
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 3px 10px 3px 3px;
       border-radius: 100px;
-      padding: 3px 10px;
+      background: var(--bg);
+      border: 1px solid rgba(34,203,173,0.30);
       text-decoration: none;
-      transition: background 0.15s ease, transform 0.15s ease, box-shadow 0.15s ease;
+      transition: transform 0.22s ease, box-shadow 0.22s ease, border-color 0.22s ease;
+      box-shadow: var(--shadow-sm);
       white-space: nowrap;
     }
     .loom-btn:hover {
-      background: rgba(34,203,173,0.18);
+      border-color: var(--teal);
+      box-shadow: 0 4px 12px rgba(34,203,173,0.20);
       transform: translateY(-1px);
-      box-shadow: 0 4px 12px rgba(34,203,173,0.18);
+    }
+    .loom-btn-play {
+      width: 17px; height: 17px;
+      border-radius: 50%;
+      background: var(--teal);
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+      transition: transform 0.22s ease, box-shadow 0.22s ease;
+      box-shadow: 0 0 0 2px rgba(34,203,173,0.15);
+    }
+    .loom-btn:hover .loom-btn-play {
+      transform: scale(1.1);
+      box-shadow: 0 0 0 3px rgba(34,203,173,0.25);
+    }
+    .loom-btn-play svg {
+      width: 6px; height: 6px;
+      fill: white;
+      margin-left: 1px;
+    }
+    .loom-btn-label {
+      font-size: 10px;
+      font-weight: 800;
+      color: var(--text);
+      letter-spacing: -0.05px;
     }
     .tag { font-size: 10px; font-weight: 800; padding: 2px 9px; border-radius: 100px; letter-spacing: 0.2px; }
     .tag-teal      { background: rgba(147,197,253,0.20);  color: #2563eb; }
@@ -1065,7 +1167,20 @@
       body.printing-single .feature-card { break-inside: avoid; box-shadow: none !important; border: 1px solid #d0d0cc !important; background: #fff !important; transform: none !important; animation: none !important; margin-bottom: 8px !important; }
       body.printing-single .feature-icon { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
       body.printing-single .tag { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
-      body.printing-single .loom-btn { background: transparent !important; color: #178a72 !important; padding: 0 !important; font-weight: 700; text-decoration: underline; }
+      body.printing-single .loom-btn {
+        background: transparent !important;
+        border: none !important;
+        box-shadow: none !important;
+        padding: 0 !important;
+        gap: 5px !important;
+      }
+      body.printing-single .loom-btn-play { display: none !important; }
+      body.printing-single .loom-btn-label {
+        color: #178a72 !important;
+        font-weight: 700 !important;
+        text-decoration: underline;
+      }
+      body.printing-single .loom-btn-label::before { content: '▶ '; }
       body.printing-single * { animation: none !important; transition: none !important; }
     }
   </style>
@@ -1266,8 +1381,8 @@
         </div>
         <div class="video-grid">
           <div class="video-card">
-            <div class="video-thumb"><iframe src="https://www.youtube.com/embed/nz6cMGhaGUA" allowfullscreen></iframe><div class="duration-badge">1:00</div></div>
-            <div class="video-body"><div class="video-title">La Estructura Fundamental de MiChamba</div><div class="video-desc">Conoce cómo MiChamba organiza tu operación: carpetas, sub-carpetas y tareas. La base que necesitas entender antes de arrancar.</div><span class="video-tag tag-basico">Básico</span></div>
+            <div class="video-thumb"><iframe src="https://www.youtube.com/embed/nz6cMGhaGUA" allowfullscreen></iframe><div class="difficulty-overlay tag-basico">Básico</div><div class="duration-badge">1:00</div></div>
+            <div class="video-body"><div class="video-title">La Estructura Fundamental de MiChamba</div><div class="video-desc">Conoce cómo MiChamba organiza tu operación: carpetas, sub-carpetas y tareas. La base que necesitas entender antes de arrancar.</div></div>
           </div>
         </div>
       </section>
@@ -1281,26 +1396,26 @@
         </div>
         <div class="video-grid">
           <div class="video-card">
-            <div class="video-thumb"><iframe src="https://www.youtube.com/embed/oewH9uV1g6Q" allowfullscreen></iframe><div class="duration-badge">0:39</div></div>
-            <div class="video-body"><div class="video-title">Cómo crear una carpeta</div><div class="video-desc">Organiza tu operación con la estructura de carpetas de MiChamba.</div><span class="video-tag tag-basico">Básico</span></div>
+            <div class="video-thumb"><iframe src="https://www.youtube.com/embed/oewH9uV1g6Q" allowfullscreen></iframe><div class="difficulty-overlay tag-basico">Básico</div><div class="duration-badge">0:39</div></div>
+            <div class="video-body"><div class="video-title">Cómo crear una carpeta</div><div class="video-desc">Organiza tu operación con la estructura de carpetas de MiChamba.</div></div>
           </div>
           <div class="video-card">
-            <div class="video-thumb"><iframe src="https://www.youtube.com/embed/IgbNUijbZgc" allowfullscreen></iframe><div class="duration-badge">1:05</div></div>
-            <div class="video-body"><div class="video-title">Cómo crear una sub-carpeta</div><div class="video-desc">Subdivide tus carpetas para mayor granularidad en tu operación.</div><span class="video-tag tag-basico">Básico</span></div>
+            <div class="video-thumb"><iframe src="https://www.youtube.com/embed/IgbNUijbZgc" allowfullscreen></iframe><div class="difficulty-overlay tag-basico">Básico</div><div class="duration-badge">1:05</div></div>
+            <div class="video-body"><div class="video-title">Cómo crear una sub-carpeta</div><div class="video-desc">Subdivide tus carpetas para mayor granularidad en tu operación.</div></div>
           </div>
           <div class="video-card">
-            <div class="video-thumb"><iframe src="https://www.youtube.com/embed/57ze2XQ1HbI" allowfullscreen></iframe><div class="duration-badge">0:45</div></div>
-            <div class="video-body"><div class="video-title">Tu primera tarea (sencilla) en MiChamba</div><div class="video-desc">Crea, asigna y configura una tarea completa en segundos.</div><span class="video-tag tag-basico">Básico</span></div>
+            <div class="video-thumb"><iframe src="https://www.youtube.com/embed/57ze2XQ1HbI" allowfullscreen></iframe><div class="difficulty-overlay tag-basico">Básico</div><div class="duration-badge">0:45</div></div>
+            <div class="video-body"><div class="video-title">Tu primera tarea (sencilla) en MiChamba</div><div class="video-desc">Crea, asigna y configura una tarea completa en segundos.</div></div>
           </div>
           <div class="video-card">
-            <div class="video-thumb"><iframe src="https://www.youtube.com/embed/j-GWN1nqGIA" allowfullscreen></iframe><div class="duration-badge">0:59</div></div>
-            <div class="video-body"><div class="video-title">Cómo crear una tarea programada</div><div class="video-desc">Programa tareas con fecha y hora de inicio para que tu equipo siempre sepa qué viene después.</div><span class="video-tag tag-basico">Básico</span></div>
+            <div class="video-thumb"><iframe src="https://www.youtube.com/embed/j-GWN1nqGIA" allowfullscreen></iframe><div class="difficulty-overlay tag-basico">Básico</div><div class="duration-badge">0:59</div></div>
+            <div class="video-body"><div class="video-title">Cómo crear una tarea programada</div><div class="video-desc">Programa tareas con fecha y hora de inicio para que tu equipo siempre sepa qué viene después.</div></div>
           </div>
         </div>
         <div class="video-grid">
           <div class="video-card">
-            <div class="video-thumb"><iframe src="https://www.youtube.com/embed/jQa28WBJFGg" allowfullscreen></iframe><div class="duration-badge">1:22</div></div>
-            <div class="video-body"><div class="video-title">Cómo crear una tarea recurrente</div><div class="video-desc">Automatiza las tareas que se repiten. Configúralas una vez y MiChamba las genera solas.</div><span class="video-tag tag-basico">Básico</span></div>
+            <div class="video-thumb"><iframe src="https://www.youtube.com/embed/jQa28WBJFGg" allowfullscreen></iframe><div class="difficulty-overlay tag-basico">Básico</div><div class="duration-badge">1:22</div></div>
+            <div class="video-body"><div class="video-title">Cómo crear una tarea recurrente</div><div class="video-desc">Automatiza las tareas que se repiten. Configúralas una vez y MiChamba las genera solas.</div></div>
           </div>
         </div>
       </section>
@@ -1332,8 +1447,8 @@
         </div>
         <div class="video-grid">
           <div class="video-card">
-            <div class="video-thumb"><iframe src="https://www.youtube.com/embed/gnICGn8usJY" allowfullscreen></iframe><div class="duration-badge">0:50</div></div>
-            <div class="video-body"><div class="video-title">Recibir y actualizar tareas en WhatsApp</div><div class="video-desc">¿Recibiste una tarea en WhatsApp? Aquí aprendes a registrar tu avance directo desde el chat.</div><span class="video-tag tag-basico">Básico</span></div>
+            <div class="video-thumb"><iframe src="https://www.youtube.com/embed/gnICGn8usJY" allowfullscreen></iframe><div class="difficulty-overlay tag-basico">Básico</div><div class="duration-badge">0:50</div></div>
+            <div class="video-body"><div class="video-title">Recibir y actualizar tareas en WhatsApp</div><div class="video-desc">¿Recibiste una tarea en WhatsApp? Aquí aprendes a registrar tu avance directo desde el chat.</div></div>
           </div>
         </div>
       </section>
@@ -1458,7 +1573,7 @@
         <div class="feature-card" style="animation-delay:0.00s">
           <div class="feature-icon icon-web">🎨</div>
           <div class="feature-body">
-            <div class="feature-header"><span class="feature-title">Calendario: leyenda de colores por tipo de tareas</span><a href="https://www.loom.com/share/85160e9aa5964b808f55fa414c9a99bd" target="_blank" class="loom-btn">▶ Ver video explicativo</a></div>
+            <div class="feature-header"><span class="feature-title">Calendario: leyenda de colores por tipo de tareas</span><a href="https://www.loom.com/share/85160e9aa5964b808f55fa414c9a99bd" target="_blank" class="loom-btn"><span class="loom-btn-play"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></span><span class="loom-btn-label">Ver demo</span></a></div>
             <p class="feature-desc">Identifica el estado de cada tarea por su color. La leyenda en la barra superior te dice qué significa cada uno.</p>
             <div class="feature-tags"><span class="tag tag-teal">Web</span></div>
           </div>
@@ -1466,7 +1581,7 @@
         <div class="feature-card" style="animation-delay:0.07s">
           <div class="feature-icon icon-web">🔍</div>
           <div class="feature-body">
-            <div class="feature-header"><span class="feature-title">Página de inicio: buscador en panel de carpetas</span><a href="https://www.loom.com/share/5e52d2da796a4fc19e8a59c4f51736e3" target="_blank" class="loom-btn">▶ Ver video explicativo</a></div>
+            <div class="feature-header"><span class="feature-title">Página de inicio: buscador en panel de carpetas</span><a href="https://www.loom.com/share/5e52d2da796a4fc19e8a59c4f51736e3" target="_blank" class="loom-btn"><span class="loom-btn-play"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></span><span class="loom-btn-label">Ver demo</span></a></div>
             <p class="feature-desc">Busca carpetas directamente desde el panel lateral. Escribe el nombre y la lista se filtra al instante, sin hacer scroll.</p>
             <div class="feature-tags"><span class="tag tag-teal">Web</span></div>
           </div>
@@ -1474,7 +1589,7 @@
         <div class="feature-card" style="animation-delay:0.14s">
           <div class="feature-icon icon-web">🔔</div>
           <div class="feature-body">
-            <div class="feature-header"><span class="feature-title">Tareas: alerta al asignar tareas fuera del horario laboral</span><a href="https://www.loom.com/share/41ccedd8bd0e42a388e4ce2d0ce9e363" target="_blank" class="loom-btn">▶ Ver video explicativo</a></div>
+            <div class="feature-header"><span class="feature-title">Tareas: alerta al asignar tareas fuera del horario laboral</span><a href="https://www.loom.com/share/41ccedd8bd0e42a388e4ce2d0ce9e363" target="_blank" class="loom-btn"><span class="loom-btn-play"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></span><span class="loom-btn-label">Ver demo</span></a></div>
             <p class="feature-desc">Recibe una alerta cuando asignes tareas fuera del horario laboral del usuario. Evita confusiones antes de que ocurran.</p>
             <div class="feature-tags"><span class="tag tag-teal">Web</span></div>
           </div>
@@ -1498,7 +1613,7 @@
         <div class="feature-card" style="animation-delay:0.00s">
           <div class="feature-icon icon-web">📊</div>
           <div class="feature-body">
-            <div class="feature-header"><span class="feature-title">Administradores: panel de resumen de actividad + recordatorios</span><a href="https://www.loom.com/share/f245a7eacf83485285ac9b71bbf1c81a" target="_blank" class="loom-btn">▶ Ver video explicativo</a></div>
+            <div class="feature-header"><span class="feature-title">Administradores: panel de resumen de actividad + recordatorios</span><a href="https://www.loom.com/share/f245a7eacf83485285ac9b71bbf1c81a" target="_blank" class="loom-btn"><span class="loom-btn-play"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></span><span class="loom-btn-label">Ver demo</span></a></div>
             <p class="feature-desc">Un vistazo rápido a la salud de cada carpeta sin tener que entrar tarea por tarea. Además, envía recordatorios a asignados para que nada se quede en el tintero.</p>
             <div class="feature-tags"><span class="tag tag-teal">Web</span></div>
           </div>
@@ -1506,7 +1621,7 @@
         <div class="feature-card" style="animation-delay:0.07s">
           <div class="feature-icon icon-logistica">🚚</div>
           <div class="feature-body">
-            <div class="feature-header"><span class="feature-title">Logística: carga masiva (Excel) para viajes/rutas</span><a href="https://www.loom.com/share/5002a6ba50d84966912cee3b05ecda74" target="_blank" class="loom-btn">▶ Ver video explicativo</a></div>
+            <div class="feature-header"><span class="feature-title">Logística: carga masiva (Excel) para viajes/rutas</span><a href="https://www.loom.com/share/5002a6ba50d84966912cee3b05ecda74" target="_blank" class="loom-btn"><span class="loom-btn-play"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></span><span class="loom-btn-label">Ver demo</span></a></div>
             <p class="feature-desc">Sube un Excel con todos tus viajes y MiChamba los crea de un jalón. Lo que antes tomaba minutos ahora toma segundos.</p>
             <div class="feature-tags"><span class="tag tag-teal">Web</span><span class="tag tag-logistica">Logística</span></div>
           </div>
@@ -1514,7 +1629,7 @@
         <div class="feature-card" style="animation-delay:0.14s">
           <div class="feature-icon icon-web">👥</div>
           <div class="feature-body">
-            <div class="feature-header"><span class="feature-title">Creación de equipos de trabajo</span><a href="https://www.loom.com/share/0cd8631142bf490598abaf83c511416d" target="_blank" class="loom-btn">▶ Ver video explicativo</a></div>
+            <div class="feature-header"><span class="feature-title">Creación de equipos de trabajo</span><a href="https://www.loom.com/share/0cd8631142bf490598abaf83c511416d" target="_blank" class="loom-btn"><span class="loom-btn-play"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></span><span class="loom-btn-label">Ver demo</span></a></div>
             <p class="feature-desc">Agrupa a tus colaboradores en equipos y asígnalos en bloque. Menos clics, más control, mismo resultado.</p>
             <div class="feature-tags"><span class="tag tag-teal">Web</span></div>
           </div>
@@ -1522,7 +1637,7 @@
         <div class="feature-card" style="animation-delay:0.21s">
           <div class="feature-icon icon-whatsapp">📨</div>
           <div class="feature-body">
-            <div class="feature-header"><span class="feature-title">Reporte de Excel programado de tareas pendientes</span><a href="https://www.loom.com/share/f48629094ab64483a8e953378abef6f7" target="_blank" class="loom-btn">▶ Ver video explicativo</a></div>
+            <div class="feature-header"><span class="feature-title">Reporte de Excel programado de tareas pendientes</span><a href="https://www.loom.com/share/f48629094ab64483a8e953378abef6f7" target="_blank" class="loom-btn"><span class="loom-btn-play"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></span><span class="loom-btn-label">Ver demo</span></a></div>
             <p class="feature-desc">Recibe por correo o WhatsApp un Excel con todas las tareas que quedaron sin completar el día anterior. Empieza el día sabiendo exactamente dónde mejorar.</p>
             <div class="feature-tags"><span class="tag tag-teal">Web</span><span class="tag tag-coral">WhatsApp</span></div>
           </div>
@@ -1546,7 +1661,7 @@
         <div class="feature-card" style="animation-delay:0.00s">
           <div class="feature-icon icon-web">👥</div>
           <div class="feature-body">
-            <div class="feature-header"><span class="feature-title">Directorio: campos de puesto, descripción de puesto y horas</span><a href="https://www.loom.com/share/a32f5a676d184b689e2b4b1ae517d561" target="_blank" class="loom-btn">▶ Ver video explicativo</a></div>
+            <div class="feature-header"><span class="feature-title">Directorio: campos de puesto, descripción de puesto y horas</span><a href="https://www.loom.com/share/a32f5a676d184b689e2b4b1ae517d561" target="_blank" class="loom-btn"><span class="loom-btn-play"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></span><span class="loom-btn-label">Ver demo</span></a></div>
             <p class="feature-desc">Ahora tienes visibilidad completa de tu equipo en un solo lugar.</p>
             <div class="feature-tags"><span class="tag tag-teal">Web</span></div>
           </div>
@@ -1554,7 +1669,7 @@
         <div class="feature-card" style="animation-delay:0.07s">
           <div class="feature-icon icon-movil">🔔</div>
           <div class="feature-body">
-            <div class="feature-header"><span class="feature-title">Panel de preferencias de usuario: mayor control sobre notificaciones</span><a href="https://www.loom.com/share/34b522c56bf34904863dbc1d49cfd2e2" target="_blank" class="loom-btn">▶ Ver video explicativo</a></div>
+            <div class="feature-header"><span class="feature-title">Panel de preferencias de usuario: mayor control sobre notificaciones</span><a href="https://www.loom.com/share/34b522c56bf34904863dbc1d49cfd2e2" target="_blank" class="loom-btn"><span class="loom-btn-play"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></span><span class="loom-btn-label">Ver demo</span></a></div>
             <p class="feature-desc">Configura las notificaciones que genera la app móvil y recibe solo lo que importa, cuando importa — sin ruido, sin distracciones.</p>
             <div class="feature-tags"><span class="tag tag-yellow">Móvil</span></div>
           </div>
@@ -1562,7 +1677,7 @@
         <div class="feature-card" style="animation-delay:0.14s">
           <div class="feature-icon icon-web">🎥</div>
           <div class="feature-body">
-            <div class="feature-header"><span class="feature-title">Tareas: adjunta videos como evidencia desde la Web</span><a href="https://www.loom.com/share/a90ab3001f294f0a9a2f8ac6fb295f70" target="_blank" class="loom-btn">▶ Ver video explicativo</a></div>
+            <div class="feature-header"><span class="feature-title">Tareas: adjunta videos como evidencia desde la Web</span><a href="https://www.loom.com/share/a90ab3001f294f0a9a2f8ac6fb295f70" target="_blank" class="loom-btn"><span class="loom-btn-play"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></span><span class="loom-btn-label">Ver demo</span></a></div>
             <p class="feature-desc">La evidencia en video ya tiene su lugar en la web. Adjunta, guarda y listo.</p>
             <div class="feature-tags"><span class="tag tag-teal">Web</span></div>
           </div>
@@ -1570,7 +1685,7 @@
         <div class="feature-card" style="animation-delay:0.21s">
           <div class="feature-icon icon-web">📅</div>
           <div class="feature-body">
-            <div class="feature-header"><span class="feature-title">Calendario: nueva apariencia</span><a href="https://www.loom.com/share/b863c85e0fde4450a4e26edbadb60f39" target="_blank" class="loom-btn">▶ Ver video explicativo</a></div>
+            <div class="feature-header"><span class="feature-title">Calendario: nueva apariencia</span><a href="https://www.loom.com/share/b863c85e0fde4450a4e26edbadb60f39" target="_blank" class="loom-btn"><span class="loom-btn-play"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></span><span class="loom-btn-label">Ver demo</span></a></div>
             <p class="feature-desc">Tu calendario, renovado. Un rediseño visual completo que hace más fácil leer, navegar y planificar.</p>
             <div class="feature-tags"><span class="tag tag-teal">Web</span></div>
           </div>
