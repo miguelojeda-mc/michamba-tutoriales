@@ -989,14 +989,14 @@
       box-shadow: var(--shadow-sm);
     }
     .feature-card:hover .feature-icon { transform: scale(1.1) rotate(-4deg); }
-    .feature-icon.icon-web       { background: linear-gradient(135deg, rgba(147,197,253,0.30), rgba(147,197,253,0.15));  border-color: rgba(147,197,253,0.40); }
-    .feature-icon.icon-movil     { background: linear-gradient(135deg, rgba(247,192,68,0.18), rgba(247,192,68,0.08));   border-color: rgba(247,192,68,0.30); }
-    .feature-icon.icon-whatsapp  { background: linear-gradient(135deg, rgba(34,203,173,0.18), rgba(34,203,173,0.08));   border-color: rgba(34,203,173,0.25); }
-    .feature-icon.icon-logistica { background: linear-gradient(135deg, rgba(220,38,38,0.16), rgba(220,38,38,0.06));    border-color: rgba(220,38,38,0.22); }
+    .feature-icon.icon-web       { background: rgba(147,197,253,0.14);  border-color: rgba(147,197,253,0.45); }
+    .feature-icon.icon-movil     { background: rgba(247,192,68,0.16);   border-color: rgba(247,192,68,0.32); }
+    .feature-icon.icon-whatsapp  { background: rgba(34,203,173,0.14);   border-color: rgba(34,203,173,0.28); }
+    .feature-icon.icon-logistica { background: rgba(220,38,38,0.10);    border-color: rgba(220,38,38,0.28); }
     .feature-body { flex: 1; min-width: 0; }
     .feature-header { display: flex; align-items: center; flex-wrap: wrap; gap: 10px; margin-bottom: 9px; }
     .feature-title { font-size: 13.5px; font-weight: 800; color: var(--text); letter-spacing: -0.1px; line-height: 1.35; }
-    .feature-desc { font-size: 12.5px; font-weight: 500; color: var(--text-2); line-height: 1.65; margin-bottom: 10px; }
+    .feature-desc { font-size: 12.5px; font-weight: 500; color: var(--text-2); line-height: 1.65; }
     .feature-tags { display: flex; flex-wrap: wrap; gap: 6px; }
     .loom-btn {
       display: inline-flex;
@@ -1281,6 +1281,11 @@
       5. NO te preocupes por el color del dot — rota automáticamente
          con el release abajo. Ver instrucciones en el bloque del cl-content.
     -->
+    <div class="outline-month">Mayo 2026</div>
+    <a href="#01-mayo-2026" class="outline-item" onclick="setOutlineActive(this, 'changelog')">
+      <span class="outline-dot"></span>
+      <span class="outline-label">1 Mayo</span>
+    </a>
     <div class="outline-month">Abril 2026</div>
     <a href="#24-abril-2026" class="outline-item" onclick="setOutlineActive(this, 'changelog')">
       <span class="outline-dot"></span>
@@ -1556,6 +1561,78 @@
         ═══════════════════════════════════════════════════════════════════════
       -->
 
+      <!-- RELEASE: 1 Mayo 2026 -->
+      <div class="release-section" id="01-mayo-2026">
+        <div class="release-header">
+          <div class="release-date">
+            <span class="release-date-month">Mayo</span>
+            <span class="release-date-day">01</span>
+            <span class="release-date-year">2026</span>
+          </div>
+          <div class="release-meta">
+            <span class="release-meta-title">Release semanal</span>
+            <span class="release-meta-sub">8 actualizaciones nuevas</span>
+          </div>
+          <button class="pdf-btn" onclick="printRelease('01-mayo-2026')"><svg width="11" height="11" viewBox="0 0 14 14" fill="none"><path d="M7 1.5v6.5m0 0L4.2 5.2M7 8l2.8-2.8M2.5 10.5v1a1 1 0 001 1h7a1 1 0 001-1v-1" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>PDF</button>
+        </div>
+        <div class="feature-card" style="animation-delay:0.00s">
+          <div class="feature-icon icon-web">📜</div>
+          <div class="feature-body">
+            <div class="feature-header"><span class="feature-title">Tareas: panel de Actividad Reciente en el modal de tarea</span><div class="feature-tags"><span class="tag tag-teal">Web</span></div><a href="https://www.loom.com/share/a7a0a566711a42f2aec5447536366a70" target="_blank" class="loom-btn"><span class="loom-btn-play"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></span><span class="loom-btn-label">Ver demo</span></a></div>
+            <p class="feature-desc">Toda la actividad de una tarea, contada en orden. Comentarios, cambios y movimientos se registran en el panel de Actividad Reciente — abre la tarea y entiende todo el contexto al instante.</p>
+          </div>
+        </div>
+        <div class="feature-card" style="animation-delay:0.07s">
+          <div class="feature-icon icon-web">🔔</div>
+          <div class="feature-body">
+            <div class="feature-header"><span class="feature-title">Notificaciones: nuevo diseño, más fácil de escanear</span><div class="feature-tags"><span class="tag tag-teal">Web</span></div><a href="https://www.loom.com/share/a2872cd03bea40e9b8c2277326bab658" target="_blank" class="loom-btn"><span class="loom-btn-play"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></span><span class="loom-btn-label">Ver demo</span></a></div>
+            <p class="feature-desc">Tu panel de notificaciones ahora luce y se siente distinto. Más limpio, mejor organizado, con cada notificación más fácil de leer al primer vistazo.</p>
+          </div>
+        </div>
+        <div class="feature-card" style="animation-delay:0.14s">
+          <div class="feature-icon icon-web">📸</div>
+          <div class="feature-body">
+            <div class="feature-header"><span class="feature-title">Tareas: documenta con foto y texto en un solo comentario</span><div class="feature-tags"><span class="tag tag-teal">Web</span></div><a href="https://www.loom.com/share/c3ff5dc4893f41d8a2b1754be0ab31da" target="_blank" class="loom-btn"><span class="loom-btn-play"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></span><span class="loom-btn-label">Ver demo</span></a></div>
+            <p class="feature-desc">Ya no necesitas escribir un comentario y adjuntar la foto por separado. Súbelas directo desde la caja de comentarios y comunica todo de una vez.</p>
+          </div>
+        </div>
+        <div class="feature-card" style="animation-delay:0.21s">
+          <div class="feature-icon icon-web">📚</div>
+          <div class="feature-body">
+            <div class="feature-header"><span class="feature-title">Menú principal: tu Centro de Recursos al alcance</span><div class="feature-tags"><span class="tag tag-teal">Web</span></div><a href="https://www.loom.com/share/5c4c2e2400b641848285204e7bc27804" target="_blank" class="loom-btn"><span class="loom-btn-play"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></span><span class="loom-btn-label">Ver demo</span></a></div>
+            <p class="feature-desc">Tutoriales, novedades y todo lo que va mejorando en MiChamba ahora vive dentro de la plataforma. Un click desde el menú principal y listo.</p>
+          </div>
+        </div>
+        <div class="feature-card" style="animation-delay:0.28s">
+          <div class="feature-icon icon-web">🗂️</div>
+          <div class="feature-body">
+            <div class="feature-header"><span class="feature-title">Archivo: tu vista activa se mantiene limpia, automáticamente</span><div class="feature-tags"><span class="tag tag-teal">Web</span></div><a href="https://www.loom.com/share/51cff9fe95524aa78912f5944f149070" target="_blank" class="loom-btn"><span class="loom-btn-play"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></span><span class="loom-btn-label">Ver demo</span></a></div>
+            <p class="feature-desc">Las tareas Completadas o Terminadas hace más de un mes se mueven solas al archivo. Tu vista activa se mantiene limpia, y todo lo viejo sigue ahí cuando lo necesites.</p>
+          </div>
+        </div>
+        <div class="feature-card" style="animation-delay:0.35s">
+          <div class="feature-icon icon-web">🔍</div>
+          <div class="feature-body">
+            <div class="feature-header"><span class="feature-title">Directorio: filtra y encuentra usuarios por nombre o puesto</span><div class="feature-tags"><span class="tag tag-teal">Web</span></div><a href="https://www.loom.com/share/9be25bb39c3649ebbb8c8d485183d278" target="_blank" class="loom-btn"><span class="loom-btn-play"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></span><span class="loom-btn-label">Ver demo</span></a></div>
+            <p class="feature-desc">El puesto de cada usuario ya es parte del directorio. Filtra por nombre o cargo y llega a la persona correcta sin scroll infinito.</p>
+          </div>
+        </div>
+        <div class="feature-card" style="animation-delay:0.42s">
+          <div class="feature-icon icon-web">⏰</div>
+          <div class="feature-body">
+            <div class="feature-header"><span class="feature-title">Tareas: visibilidad de tareas atrasadas, incluso después de entregarlas</span><div class="feature-tags"><span class="tag tag-teal">Web</span></div><a href="https://www.loom.com/share/629123965bea42b9946995d66ef03bff" target="_blank" class="loom-btn"><span class="loom-btn-play"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></span><span class="loom-btn-label">Ver demo</span></a></div>
+            <p class="feature-desc">Una tarea entregada tarde sigue mostrando que llegó atrasada, aunque ya esté terminada. Visibilidad real del cumplimiento, sin maquillar resultados.</p>
+          </div>
+        </div>
+        <div class="feature-card" style="animation-delay:0.49s">
+          <div class="feature-icon icon-web">👥</div>
+          <div class="feature-body">
+            <div class="feature-header"><span class="feature-title">Directorio: carga masiva de equipos vía Excel</span><div class="feature-tags"><span class="tag tag-teal">Web</span></div><a href="https://www.loom.com/share/21bac7b9f7cf4de187014a7da57a8388" target="_blank" class="loom-btn"><span class="loom-btn-play"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></span><span class="loom-btn-label">Ver demo</span></a></div>
+            <p class="feature-desc">Así como ya podías subir usuarios masivamente con un Excel, ahora también puedes subir equipos completos. Pega tu lista, sube el archivo y MiChamba arma todo de un jalón.</p>
+          </div>
+        </div>
+      </div>
+
       <!-- RELEASE: 24 Abril 2026 -->
       <div class="release-section" id="24-abril-2026">
         <div class="release-header">
@@ -1573,25 +1650,22 @@
         <div class="feature-card" style="animation-delay:0.00s">
           <div class="feature-icon icon-web">🎨</div>
           <div class="feature-body">
-            <div class="feature-header"><span class="feature-title">Calendario: leyenda de colores por tipo de tareas</span><a href="https://www.loom.com/share/85160e9aa5964b808f55fa414c9a99bd" target="_blank" class="loom-btn"><span class="loom-btn-play"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></span><span class="loom-btn-label">Ver demo</span></a></div>
+            <div class="feature-header"><span class="feature-title">Calendario: leyenda de colores por tipo de tareas</span><div class="feature-tags"><span class="tag tag-teal">Web</span></div><a href="https://www.loom.com/share/85160e9aa5964b808f55fa414c9a99bd" target="_blank" class="loom-btn"><span class="loom-btn-play"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></span><span class="loom-btn-label">Ver demo</span></a></div>
             <p class="feature-desc">Identifica el estado de cada tarea por su color. La leyenda en la barra superior te dice qué significa cada uno.</p>
-            <div class="feature-tags"><span class="tag tag-teal">Web</span></div>
           </div>
         </div>
         <div class="feature-card" style="animation-delay:0.07s">
           <div class="feature-icon icon-web">🔍</div>
           <div class="feature-body">
-            <div class="feature-header"><span class="feature-title">Página de inicio: buscador en panel de carpetas</span><a href="https://www.loom.com/share/5e52d2da796a4fc19e8a59c4f51736e3" target="_blank" class="loom-btn"><span class="loom-btn-play"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></span><span class="loom-btn-label">Ver demo</span></a></div>
+            <div class="feature-header"><span class="feature-title">Página de inicio: buscador en panel de carpetas</span><div class="feature-tags"><span class="tag tag-teal">Web</span></div><a href="https://www.loom.com/share/5e52d2da796a4fc19e8a59c4f51736e3" target="_blank" class="loom-btn"><span class="loom-btn-play"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></span><span class="loom-btn-label">Ver demo</span></a></div>
             <p class="feature-desc">Busca carpetas directamente desde el panel lateral. Escribe el nombre y la lista se filtra al instante, sin hacer scroll.</p>
-            <div class="feature-tags"><span class="tag tag-teal">Web</span></div>
           </div>
         </div>
         <div class="feature-card" style="animation-delay:0.14s">
           <div class="feature-icon icon-web">🔔</div>
           <div class="feature-body">
-            <div class="feature-header"><span class="feature-title">Tareas: alerta al asignar tareas fuera del horario laboral</span><a href="https://www.loom.com/share/41ccedd8bd0e42a388e4ce2d0ce9e363" target="_blank" class="loom-btn"><span class="loom-btn-play"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></span><span class="loom-btn-label">Ver demo</span></a></div>
+            <div class="feature-header"><span class="feature-title">Tareas: alerta al asignar tareas fuera del horario laboral</span><div class="feature-tags"><span class="tag tag-teal">Web</span></div><a href="https://www.loom.com/share/41ccedd8bd0e42a388e4ce2d0ce9e363" target="_blank" class="loom-btn"><span class="loom-btn-play"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></span><span class="loom-btn-label">Ver demo</span></a></div>
             <p class="feature-desc">Recibe una alerta cuando asignes tareas fuera del horario laboral del usuario. Evita confusiones antes de que ocurran.</p>
-            <div class="feature-tags"><span class="tag tag-teal">Web</span></div>
           </div>
         </div>
       </div>
@@ -1613,33 +1687,29 @@
         <div class="feature-card" style="animation-delay:0.00s">
           <div class="feature-icon icon-web">📊</div>
           <div class="feature-body">
-            <div class="feature-header"><span class="feature-title">Administradores: panel de resumen de actividad + recordatorios</span><a href="https://www.loom.com/share/f245a7eacf83485285ac9b71bbf1c81a" target="_blank" class="loom-btn"><span class="loom-btn-play"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></span><span class="loom-btn-label">Ver demo</span></a></div>
+            <div class="feature-header"><span class="feature-title">Administradores: panel de resumen de actividad + recordatorios</span><div class="feature-tags"><span class="tag tag-teal">Web</span></div><a href="https://www.loom.com/share/f245a7eacf83485285ac9b71bbf1c81a" target="_blank" class="loom-btn"><span class="loom-btn-play"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></span><span class="loom-btn-label">Ver demo</span></a></div>
             <p class="feature-desc">Un vistazo rápido a la salud de cada carpeta sin tener que entrar tarea por tarea. Además, envía recordatorios a asignados para que nada se quede en el tintero.</p>
-            <div class="feature-tags"><span class="tag tag-teal">Web</span></div>
           </div>
         </div>
         <div class="feature-card" style="animation-delay:0.07s">
           <div class="feature-icon icon-logistica">🚚</div>
           <div class="feature-body">
-            <div class="feature-header"><span class="feature-title">Logística: carga masiva (Excel) para viajes/rutas</span><a href="https://www.loom.com/share/5002a6ba50d84966912cee3b05ecda74" target="_blank" class="loom-btn"><span class="loom-btn-play"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></span><span class="loom-btn-label">Ver demo</span></a></div>
+            <div class="feature-header"><span class="feature-title">Logística: carga masiva (Excel) para viajes/rutas</span><div class="feature-tags"><span class="tag tag-teal">Web</span><span class="tag tag-logistica">Logística</span></div><a href="https://www.loom.com/share/5002a6ba50d84966912cee3b05ecda74" target="_blank" class="loom-btn"><span class="loom-btn-play"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></span><span class="loom-btn-label">Ver demo</span></a></div>
             <p class="feature-desc">Sube un Excel con todos tus viajes y MiChamba los crea de un jalón. Lo que antes tomaba minutos ahora toma segundos.</p>
-            <div class="feature-tags"><span class="tag tag-teal">Web</span><span class="tag tag-logistica">Logística</span></div>
           </div>
         </div>
         <div class="feature-card" style="animation-delay:0.14s">
           <div class="feature-icon icon-web">👥</div>
           <div class="feature-body">
-            <div class="feature-header"><span class="feature-title">Creación de equipos de trabajo</span><a href="https://www.loom.com/share/0cd8631142bf490598abaf83c511416d" target="_blank" class="loom-btn"><span class="loom-btn-play"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></span><span class="loom-btn-label">Ver demo</span></a></div>
+            <div class="feature-header"><span class="feature-title">Creación de equipos de trabajo</span><div class="feature-tags"><span class="tag tag-teal">Web</span></div><a href="https://www.loom.com/share/0cd8631142bf490598abaf83c511416d" target="_blank" class="loom-btn"><span class="loom-btn-play"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></span><span class="loom-btn-label">Ver demo</span></a></div>
             <p class="feature-desc">Agrupa a tus colaboradores en equipos y asígnalos en bloque. Menos clics, más control, mismo resultado.</p>
-            <div class="feature-tags"><span class="tag tag-teal">Web</span></div>
           </div>
         </div>
         <div class="feature-card" style="animation-delay:0.21s">
           <div class="feature-icon icon-whatsapp">📨</div>
           <div class="feature-body">
-            <div class="feature-header"><span class="feature-title">Reporte de Excel programado de tareas pendientes</span><a href="https://www.loom.com/share/f48629094ab64483a8e953378abef6f7" target="_blank" class="loom-btn"><span class="loom-btn-play"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></span><span class="loom-btn-label">Ver demo</span></a></div>
+            <div class="feature-header"><span class="feature-title">Reporte de Excel programado de tareas pendientes</span><div class="feature-tags"><span class="tag tag-teal">Web</span><span class="tag tag-coral">WhatsApp</span></div><a href="https://www.loom.com/share/f48629094ab64483a8e953378abef6f7" target="_blank" class="loom-btn"><span class="loom-btn-play"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></span><span class="loom-btn-label">Ver demo</span></a></div>
             <p class="feature-desc">Recibe por correo o WhatsApp un Excel con todas las tareas que quedaron sin completar el día anterior. Empieza el día sabiendo exactamente dónde mejorar.</p>
-            <div class="feature-tags"><span class="tag tag-teal">Web</span><span class="tag tag-coral">WhatsApp</span></div>
           </div>
         </div>
       </div>
@@ -1661,33 +1731,29 @@
         <div class="feature-card" style="animation-delay:0.00s">
           <div class="feature-icon icon-web">👥</div>
           <div class="feature-body">
-            <div class="feature-header"><span class="feature-title">Directorio: campos de puesto, descripción de puesto y horas</span><a href="https://www.loom.com/share/a32f5a676d184b689e2b4b1ae517d561" target="_blank" class="loom-btn"><span class="loom-btn-play"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></span><span class="loom-btn-label">Ver demo</span></a></div>
+            <div class="feature-header"><span class="feature-title">Directorio: campos de puesto, descripción de puesto y horas</span><div class="feature-tags"><span class="tag tag-teal">Web</span></div><a href="https://www.loom.com/share/a32f5a676d184b689e2b4b1ae517d561" target="_blank" class="loom-btn"><span class="loom-btn-play"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></span><span class="loom-btn-label">Ver demo</span></a></div>
             <p class="feature-desc">Ahora tienes visibilidad completa de tu equipo en un solo lugar.</p>
-            <div class="feature-tags"><span class="tag tag-teal">Web</span></div>
           </div>
         </div>
         <div class="feature-card" style="animation-delay:0.07s">
           <div class="feature-icon icon-movil">🔔</div>
           <div class="feature-body">
-            <div class="feature-header"><span class="feature-title">Panel de preferencias de usuario: mayor control sobre notificaciones</span><a href="https://www.loom.com/share/34b522c56bf34904863dbc1d49cfd2e2" target="_blank" class="loom-btn"><span class="loom-btn-play"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></span><span class="loom-btn-label">Ver demo</span></a></div>
+            <div class="feature-header"><span class="feature-title">Panel de preferencias de usuario: mayor control sobre notificaciones</span><div class="feature-tags"><span class="tag tag-yellow">Móvil</span></div><a href="https://www.loom.com/share/34b522c56bf34904863dbc1d49cfd2e2" target="_blank" class="loom-btn"><span class="loom-btn-play"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></span><span class="loom-btn-label">Ver demo</span></a></div>
             <p class="feature-desc">Configura las notificaciones que genera la app móvil y recibe solo lo que importa, cuando importa — sin ruido, sin distracciones.</p>
-            <div class="feature-tags"><span class="tag tag-yellow">Móvil</span></div>
           </div>
         </div>
         <div class="feature-card" style="animation-delay:0.14s">
           <div class="feature-icon icon-web">🎥</div>
           <div class="feature-body">
-            <div class="feature-header"><span class="feature-title">Tareas: adjunta videos como evidencia desde la Web</span><a href="https://www.loom.com/share/a90ab3001f294f0a9a2f8ac6fb295f70" target="_blank" class="loom-btn"><span class="loom-btn-play"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></span><span class="loom-btn-label">Ver demo</span></a></div>
+            <div class="feature-header"><span class="feature-title">Tareas: adjunta videos como evidencia desde la Web</span><div class="feature-tags"><span class="tag tag-teal">Web</span></div><a href="https://www.loom.com/share/a90ab3001f294f0a9a2f8ac6fb295f70" target="_blank" class="loom-btn"><span class="loom-btn-play"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></span><span class="loom-btn-label">Ver demo</span></a></div>
             <p class="feature-desc">La evidencia en video ya tiene su lugar en la web. Adjunta, guarda y listo.</p>
-            <div class="feature-tags"><span class="tag tag-teal">Web</span></div>
           </div>
         </div>
         <div class="feature-card" style="animation-delay:0.21s">
           <div class="feature-icon icon-web">📅</div>
           <div class="feature-body">
-            <div class="feature-header"><span class="feature-title">Calendario: nueva apariencia</span><a href="https://www.loom.com/share/b863c85e0fde4450a4e26edbadb60f39" target="_blank" class="loom-btn"><span class="loom-btn-play"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></span><span class="loom-btn-label">Ver demo</span></a></div>
+            <div class="feature-header"><span class="feature-title">Calendario: nueva apariencia</span><div class="feature-tags"><span class="tag tag-teal">Web</span></div><a href="https://www.loom.com/share/b863c85e0fde4450a4e26edbadb60f39" target="_blank" class="loom-btn"><span class="loom-btn-play"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></span><span class="loom-btn-label">Ver demo</span></a></div>
             <p class="feature-desc">Tu calendario, renovado. Un rediseño visual completo que hace más fácil leer, navegar y planificar.</p>
-            <div class="feature-tags"><span class="tag tag-teal">Web</span></div>
           </div>
         </div>
       </div>
@@ -1709,41 +1775,36 @@
         <div class="feature-card" style="animation-delay:0.00s">
           <div class="feature-icon icon-whatsapp">🔍</div>
           <div class="feature-body">
-            <div class="feature-header"><span class="feature-title">WhatsApp: filtrado inteligente de tareas en /empezar</span></div>
+            <div class="feature-header"><span class="feature-title">WhatsApp: filtrado inteligente de tareas en /empezar</span><div class="feature-tags"><span class="tag tag-coral">WhatsApp</span></div></div>
             <p class="feature-desc">Solo muestra tareas elegibles para actualizar (En progreso, Pausadas, Asignadas vigentes). Las vencidas quedan excluidas automáticamente.</p>
-            <div class="feature-tags"><span class="tag tag-coral">WhatsApp</span></div>
           </div>
         </div>
         <div class="feature-card" style="animation-delay:0.07s">
           <div class="feature-icon icon-whatsapp">👥</div>
           <div class="feature-body">
-            <div class="feature-header"><span class="feature-title">WhatsApp: asignación de usuarios por subcarpeta</span></div>
+            <div class="feature-header"><span class="feature-title">WhatsApp: asignación de usuarios por subcarpeta</span><div class="feature-tags"><span class="tag tag-coral">WhatsApp</span></div></div>
             <p class="feature-desc">Al asignar tareas desde WhatsApp, el sistema solo muestra los miembros de la subcarpeta correspondiente, reduciendo errores.</p>
-            <div class="feature-tags"><span class="tag tag-coral">WhatsApp</span></div>
           </div>
         </div>
         <div class="feature-card" style="animation-delay:0.14s">
           <div class="feature-icon icon-web">📅</div>
           <div class="feature-body">
-            <div class="feature-header"><span class="feature-title">Rango de fechas en MiChamba Home</span></div>
+            <div class="feature-header"><span class="feature-title">Rango de fechas en MiChamba Home</span><div class="feature-tags"><span class="tag tag-teal">Web</span></div></div>
             <p class="feature-desc">Selecciona un rango de fechas personalizado en el panel principal para filtrar y visualizar la información de tu proyecto.</p>
-            <div class="feature-tags"><span class="tag tag-teal">Web</span></div>
           </div>
         </div>
         <div class="feature-card" style="animation-delay:0.21s">
           <div class="feature-icon icon-web">⚡</div>
           <div class="feature-body">
-            <div class="feature-header"><span class="feature-title">Edición masiva desde la tabla principal de tareas</span></div>
+            <div class="feature-header"><span class="feature-title">Edición masiva desde la tabla principal de tareas</span><div class="feature-tags"><span class="tag tag-teal">Web</span></div></div>
             <p class="feature-desc">Selecciona múltiples tareas y aplica cambios de forma simultánea: estatus, asignados, fechas y más.</p>
-            <div class="feature-tags"><span class="tag tag-teal">Web</span></div>
           </div>
         </div>
         <div class="feature-card" style="animation-delay:0.28s">
           <div class="feature-icon icon-whatsapp">💬</div>
           <div class="feature-body">
-            <div class="feature-header"><span class="feature-title">Etiquetar personas en comentarios (@menciones)</span></div>
+            <div class="feature-header"><span class="feature-title">Etiquetar personas en comentarios (@menciones)</span><div class="feature-tags"><span class="tag tag-teal">Web</span><span class="tag tag-coral">WhatsApp</span></div></div>
             <p class="feature-desc">Menciona a cualquier miembro de tu organización escribiendo @Nombre en los comentarios de una tarea. La persona etiquetada recibe una notificación in-app y por WhatsApp al instante.</p>
-            <div class="feature-tags"><span class="tag tag-teal">Web</span><span class="tag tag-coral">WhatsApp</span></div>
           </div>
         </div>
       </div>
@@ -1765,25 +1826,22 @@
         <div class="feature-card" style="animation-delay:0.00s">
           <div class="feature-icon icon-web">🎨</div>
           <div class="feature-body">
-            <div class="feature-header"><span class="feature-title">Cambio de colores en estatus de tareas</span></div>
+            <div class="feature-header"><span class="feature-title">Cambio de colores en estatus de tareas</span><div class="feature-tags"><span class="tag tag-teal">Web</span></div></div>
             <p class="feature-desc">Los colores de los estatus de tarea han sido actualizados para mejorar la legibilidad y claridad visual.</p>
-            <div class="feature-tags"><span class="tag tag-teal">Web</span></div>
           </div>
         </div>
         <div class="feature-card" style="animation-delay:0.07s">
           <div class="feature-icon icon-web">👥</div>
           <div class="feature-body">
-            <div class="feature-header"><span class="feature-title">Panel de usuarios: crear y editar usuarios activos</span></div>
+            <div class="feature-header"><span class="feature-title">Panel de usuarios: crear y editar usuarios activos</span><div class="feature-tags"><span class="tag tag-teal">Web</span></div></div>
             <p class="feature-desc">Los administradores pueden agregar nuevos usuarios y editar la información de los existentes desde el directorio.</p>
-            <div class="feature-tags"><span class="tag tag-teal">Web</span></div>
           </div>
         </div>
         <div class="feature-card" style="animation-delay:0.14s">
           <div class="feature-icon icon-logistica">🚚</div>
           <div class="feature-body">
-            <div class="feature-header"><span class="feature-title">Logística: marcar viaje como terminado desde la web</span></div>
+            <div class="feature-header"><span class="feature-title">Logística: marcar viaje como terminado desde la web</span><div class="feature-tags"><span class="tag tag-teal">Web</span><span class="tag tag-coral">WhatsApp</span><span class="tag tag-logistica">Logística</span></div></div>
             <p class="feature-desc">Al marcar una tarea de logística como terminada en la web, el viaje asociado también se cierra automáticamente.</p>
-            <div class="feature-tags"><span class="tag tag-teal">Web</span><span class="tag tag-coral">WhatsApp</span><span class="tag tag-logistica">Logística</span></div>
           </div>
         </div>
       </div>
@@ -1805,25 +1863,22 @@
         <div class="feature-card" style="animation-delay:0.00s">
           <div class="feature-icon icon-web">🔔</div>
           <div class="feature-body">
-            <div class="feature-header"><span class="feature-title">Configuración de notificaciones por evento en subcarpetas</span></div>
+            <div class="feature-header"><span class="feature-title">Configuración de notificaciones por evento en subcarpetas</span><div class="feature-tags"><span class="tag tag-teal">Web</span></div></div>
             <p class="feature-desc">Los administradores pueden configurar qué eventos dentro de cada subcarpeta generan notificaciones en la app móvil.</p>
-            <div class="feature-tags"><span class="tag tag-teal">Web</span></div>
           </div>
         </div>
         <div class="feature-card" style="animation-delay:0.07s">
           <div class="feature-icon icon-web">📅</div>
           <div class="feature-body">
-            <div class="feature-header"><span class="feature-title">Tareas recurrentes visibles en el calendario</span></div>
+            <div class="feature-header"><span class="feature-title">Tareas recurrentes visibles en el calendario</span><div class="feature-tags"><span class="tag tag-teal">Web</span></div></div>
             <p class="feature-desc">Las tareas recurrentes ahora se muestran correctamente dentro de la vista de calendario.</p>
-            <div class="feature-tags"><span class="tag tag-teal">Web</span></div>
           </div>
         </div>
         <div class="feature-card" style="animation-delay:0.14s">
           <div class="feature-icon icon-web">⚡</div>
           <div class="feature-body">
-            <div class="feature-header"><span class="feature-title">Tareas recurrentes pueden heredar recordatorios</span></div>
+            <div class="feature-header"><span class="feature-title">Tareas recurrentes pueden heredar recordatorios</span><div class="feature-tags"><span class="tag tag-teal">Web</span></div></div>
             <p class="feature-desc">Al crear una tarea recurrente, los recordatorios configurados se propagan automáticamente a todas las repeticiones.</p>
-            <div class="feature-tags"><span class="tag tag-teal">Web</span></div>
           </div>
         </div>
       </div>
@@ -1845,25 +1900,22 @@
         <div class="feature-card" style="animation-delay:0.00s">
           <div class="feature-icon icon-web">🔍</div>
           <div class="feature-body">
-            <div class="feature-header"><span class="feature-title">Filtro de tags en vista de tareas</span></div>
+            <div class="feature-header"><span class="feature-title">Filtro de tags en vista de tareas</span><div class="feature-tags"><span class="tag tag-teal">Web</span></div></div>
             <p class="feature-desc">Filtra tareas por etiquetas directamente desde la vista principal para encontrar lo que necesitas más rápido.</p>
-            <div class="feature-tags"><span class="tag tag-teal">Web</span></div>
           </div>
         </div>
         <div class="feature-card" style="animation-delay:0.07s">
           <div class="feature-icon icon-whatsapp">📊</div>
           <div class="feature-body">
-            <div class="feature-header"><span class="feature-title">Reportes de subcarpetas: opción de WhatsApp disponible</span></div>
+            <div class="feature-header"><span class="feature-title">Reportes de subcarpetas: opción de WhatsApp disponible</span><div class="feature-tags"><span class="tag tag-teal">Web</span><span class="tag tag-coral">WhatsApp</span></div></div>
             <p class="feature-desc">Ahora también puedes programar el envío de reportes de subcarpetas por WhatsApp.</p>
-            <div class="feature-tags"><span class="tag tag-teal">Web</span><span class="tag tag-coral">WhatsApp</span></div>
           </div>
         </div>
         <div class="feature-card" style="animation-delay:0.14s">
           <div class="feature-icon icon-web">🔔</div>
           <div class="feature-body">
-            <div class="feature-header"><span class="feature-title">Etiqueta visual: Tarea Atrasada</span></div>
+            <div class="feature-header"><span class="feature-title">Etiqueta visual: Tarea Atrasada</span><div class="feature-tags"><span class="tag tag-teal">Web</span></div></div>
             <p class="feature-desc">Las tareas con fecha vencida ahora se identifican automáticamente con una etiqueta de "Atrasada".</p>
-            <div class="feature-tags"><span class="tag tag-teal">Web</span></div>
           </div>
         </div>
       </div>
