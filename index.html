@@ -342,6 +342,49 @@
     .outline-search-clear:hover { color: var(--text); background: var(--border); }
     .outline-search.has-value .outline-search-clear { display: flex; }
 
+    /* ── SEARCH EMPTY STATE ── */
+    /* Shown in the main content area when search yields zero matches. */
+    .search-empty-state {
+      background: var(--bg);
+      border-radius: var(--r-lg);
+      padding: 56px 32px;
+      text-align: center;
+      box-shadow: var(--shadow-md);
+      margin-bottom: 16px;
+      animation: fadeUp 0.3s cubic-bezier(.16,1,.3,1) both;
+    }
+    .search-empty-state-icon {
+      width: 56px;
+      height: 56px;
+      margin: 0 auto 18px;
+      border-radius: 50%;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--text-3);
+    }
+    .search-empty-state-icon svg { width: 22px; height: 22px; }
+    .search-empty-state-title {
+      font-size: 17px;
+      font-weight: 800;
+      color: var(--text);
+      letter-spacing: -0.3px;
+      margin-bottom: 6px;
+    }
+    .search-empty-state-desc {
+      font-size: 13px;
+      color: var(--text-2);
+      line-height: 1.55;
+      max-width: 380px;
+      margin: 0 auto;
+    }
+    .search-empty-state-query {
+      font-weight: 700;
+      color: var(--text);
+    }
+
     /* Empty state for outline items when search hides their content */
     .outline-item.empty { opacity: 0.35; pointer-events: none; }
     .outline-item.empty .outline-dot { background: var(--border-dark) !important; box-shadow: none !important; transform: none !important; }
@@ -411,18 +454,81 @@
     .outline-item:hover .outline-label { color: var(--text-2); }
     .outline-item.active .outline-label { color: var(--text); font-weight: 700; }
 
-    /* Outline month groups (changelog) */
-    .outline-month {
+    /* Outline month groups (changelog) — collapsible by month */
+    .outline-month-group {
       margin-top: 14px;
-      padding: 0 10px 4px;
+    }
+    .outline-month-group:first-of-type { margin-top: 0; }
+
+    /* Month toggle button (clickable header for each month) */
+    .outline-month-toggle {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      width: 100%;
+      padding: 5px 8px 5px 6px;
+      background: transparent;
+      border: none;
+      cursor: pointer;
+      font-family: 'Nunito', sans-serif;
       font-size: 9px;
       font-weight: 800;
       letter-spacing: 1.2px;
       text-transform: uppercase;
       color: var(--text-3);
-      opacity: 0.6;
+      border-radius: 6px;
+      transition: background 0.15s ease, color 0.15s ease;
     }
-    .outline-month:first-of-type { margin-top: 0; }
+    .outline-month-toggle:hover {
+      background: rgba(23,49,44,0.04);
+      color: var(--text-2);
+    }
+    .outline-month-chevron {
+      width: 11px;
+      height: 11px;
+      flex-shrink: 0;
+      transition: transform 0.22s ease;
+      color: currentColor;
+    }
+    .outline-month-group.expanded .outline-month-chevron {
+      transform: rotate(90deg);
+    }
+    .outline-month-label {
+      flex: 1;
+      text-align: left;
+    }
+    .outline-month-count {
+      font-size: 9px;
+      font-weight: 700;
+      background: var(--surface);
+      color: var(--text-3);
+      padding: 1px 7px;
+      border-radius: 100px;
+      letter-spacing: 0.1px;
+      border: 1px solid var(--border);
+      min-width: 18px;
+      text-align: center;
+    }
+    .outline-month-toggle:hover .outline-month-count {
+      background: var(--bg);
+    }
+
+    /* Items container — collapsed by default.
+       max-height is set INLINE by JS based on the actual content height
+       (scrollHeight), so the animation uses its full duration in the
+       visible range — no "stuck then sudden snap" feeling. */
+    .outline-month-items {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.28s ease, opacity 0.18s ease, padding-top 0.28s ease;
+      opacity: 0;
+      padding-top: 0;
+    }
+    .outline-month-group.expanded .outline-month-items {
+      opacity: 1;
+      padding-top: 4px;
+      /* max-height intentionally NOT set here — JS handles it inline */
+    }
 
     /* ── MAIN ── */
     .main { flex: 1; min-height: 100vh; overflow-x: hidden; width: 100%; }
@@ -878,20 +984,18 @@
       border-left: 3px solid var(--border);
       transition: border-color 0.3s ease;
     }
-    /* Rotating accent — matches the module color pattern */
-    .release-section:nth-of-type(1) .release-header { border-left-color: var(--coral); }
-    .release-section:nth-of-type(2) .release-header { border-left-color: var(--teal); }
-    .release-section:nth-of-type(3) .release-header { border-left-color: var(--yellow); }
-    .release-section:nth-of-type(4) .release-header { border-left-color: var(--coral); }
-    .release-section:nth-of-type(5) .release-header { border-left-color: var(--teal); }
-    .release-section:nth-of-type(6) .release-header { border-left-color: var(--yellow); }
+    /* Rotating accent — matches the module color pattern.
+       Uses nth-of-type(3n+X) so the rotation works for ANY number of releases:
+       positions 1, 4, 7, 10, ... → coral
+       positions 2, 5, 8, 11, ... → teal
+       positions 3, 6, 9, 12, ... → yellow */
+    .release-section:nth-of-type(3n+1) .release-header { border-left-color: var(--coral); }
+    .release-section:nth-of-type(3n+2) .release-header { border-left-color: var(--teal); }
+    .release-section:nth-of-type(3n)   .release-header { border-left-color: var(--yellow); }
     /* Calendar tile month color rotates to match the border accent */
-    .release-section:nth-of-type(1) .release-date-month { color: var(--coral); }
-    .release-section:nth-of-type(2) .release-date-month { color: #178a72; }
-    .release-section:nth-of-type(3) .release-date-month { color: #b8861f; }
-    .release-section:nth-of-type(4) .release-date-month { color: var(--coral); }
-    .release-section:nth-of-type(5) .release-date-month { color: #178a72; }
-    .release-section:nth-of-type(6) .release-date-month { color: #b8861f; }
+    .release-section:nth-of-type(3n+1) .release-date-month { color: var(--coral); }
+    .release-section:nth-of-type(3n+2) .release-date-month { color: #178a72; }
+    .release-section:nth-of-type(3n)   .release-date-month { color: #b8861f; }
 
     /* Calendar-style date tile — white fill + colored border (rotates per release, see below) */
     .release-date {
@@ -905,13 +1009,11 @@
       box-shadow: var(--shadow-sm);
       transition: border-color 0.3s ease;
     }
-    /* Rotating colored border — matches the release-header border-left + month color */
-    .release-section:nth-of-type(1) .release-date { border-color: rgba(242,115,91,0.7); }
-    .release-section:nth-of-type(2) .release-date { border-color: rgba(34,203,173,0.7); }
-    .release-section:nth-of-type(3) .release-date { border-color: rgba(247,192,68,0.85); }
-    .release-section:nth-of-type(4) .release-date { border-color: rgba(242,115,91,0.7); }
-    .release-section:nth-of-type(5) .release-date { border-color: rgba(34,203,173,0.7); }
-    .release-section:nth-of-type(6) .release-date { border-color: rgba(247,192,68,0.85); }
+    /* Rotating colored border — matches the release-header border-left + month color
+       (uses the same nth-of-type(3n+X) pattern for any number of releases) */
+    .release-section:nth-of-type(3n+1) .release-date { border-color: rgba(242,115,91,0.7); }
+    .release-section:nth-of-type(3n+2) .release-date { border-color: rgba(34,203,173,0.7); }
+    .release-section:nth-of-type(3n)   .release-date { border-color: rgba(247,192,68,0.85); }
     .release-date-month {
       font-size: 9px; font-weight: 800;
       text-transform: uppercase;
@@ -1266,56 +1368,96 @@
       ⚠️ AL AGREGAR UN NUEVO RELEASE EN EL RAIL:
 
       1. El nuevo <a class="outline-item"> va al INICIO del mes correspondiente
-         (los más recientes arriba — orden cronológico inverso).
+         (los más recientes arriba — orden cronológico inverso). Va DENTRO del
+         <div class="outline-month-items"> del mes correspondiente.
 
       2. El href debe coincidir con el id del release abajo.
          Formato: href="#DD-mes-YYYY" (ej. "#24-abril-2026")
 
-      3. Si es un mes nuevo, agregar primero <div class="outline-month">
-         con el nombre del mes en español. Ejemplo:
-            <div class="outline-month">Mayo 2026</div>
+      3. Si es un mes nuevo, agregar primero el bloque completo de
+         <div class="outline-month-group" data-month="MES-YYYY"> con su
+         toggle button + items container. Ver ejemplos abajo.
 
       4. El label muestra "DD Mes" (mes completo en español).
          Ejemplo: "24 Abril", "01 Mayo", "15 Septiembre".
 
-      5. NO te preocupes por el color del dot — rota automáticamente
+      5. El conteo en .outline-month-count se actualiza automáticamente vía JS
+         al cargar la página (basado en cuántos .outline-item tiene el mes).
+         NO necesitas mantenerlo a mano.
+
+      6. NO te preocupes por el color del dot — rota automáticamente
          con el release abajo. Ver instrucciones en el bloque del cl-content.
+
+      7. Los meses son colapsables. Por default solo el mes actual está
+         expandido. La lógica de expansión/colapso vive en el JS del archivo.
     -->
-    <div class="outline-month">Mayo 2026</div>
-    <a href="#01-mayo-2026" class="outline-item" onclick="setOutlineActive(this, 'changelog')">
-      <span class="outline-dot"></span>
-      <span class="outline-label">1 Mayo</span>
-    </a>
-    <div class="outline-month">Abril 2026</div>
-    <a href="#24-abril-2026" class="outline-item" onclick="setOutlineActive(this, 'changelog')">
-      <span class="outline-dot"></span>
-      <span class="outline-label">24 Abril</span>
-    </a>
-    <a href="#17-abril-2026" class="outline-item" onclick="setOutlineActive(this, 'changelog')">
-      <span class="outline-dot"></span>
-      <span class="outline-label">17 Abril</span>
-    </a>
-    <a href="#10-abril-2026" class="outline-item" onclick="setOutlineActive(this, 'changelog')">
-      <span class="outline-dot"></span>
-      <span class="outline-label">10 Abril</span>
-    </a>
-    <div class="outline-month">Marzo 2026</div>
-    <a href="#27-marzo-2026" class="outline-item" onclick="setOutlineActive(this, 'changelog')">
-      <span class="outline-dot"></span>
-      <span class="outline-label">27 Marzo</span>
-    </a>
-    <a href="#20-marzo-2026" class="outline-item" onclick="setOutlineActive(this, 'changelog')">
-      <span class="outline-dot"></span>
-      <span class="outline-label">20 Marzo</span>
-    </a>
-    <a href="#13-marzo-2026" class="outline-item" onclick="setOutlineActive(this, 'changelog')">
-      <span class="outline-dot"></span>
-      <span class="outline-label">13 Marzo</span>
-    </a>
-    <a href="#06-marzo-2026" class="outline-item" onclick="setOutlineActive(this, 'changelog')">
-      <span class="outline-dot"></span>
-      <span class="outline-label">6 Marzo</span>
-    </a>
+    <div class="outline-month-group" data-month="mayo-2026">
+      <button type="button" class="outline-month-toggle" aria-expanded="false">
+        <svg class="outline-month-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+        <span class="outline-month-label">Mayo 2026</span>
+        <span class="outline-month-count"></span>
+      </button>
+      <div class="outline-month-items">
+        <a href="#15-mayo-2026" class="outline-item" onclick="setOutlineActive(this, 'changelog')">
+          <span class="outline-dot"></span>
+          <span class="outline-label">15 Mayo</span>
+        </a>
+        <a href="#08-mayo-2026" class="outline-item" onclick="setOutlineActive(this, 'changelog')">
+          <span class="outline-dot"></span>
+          <span class="outline-label">8 Mayo</span>
+        </a>
+        <a href="#01-mayo-2026" class="outline-item" onclick="setOutlineActive(this, 'changelog')">
+          <span class="outline-dot"></span>
+          <span class="outline-label">1 Mayo</span>
+        </a>
+      </div>
+    </div>
+    <div class="outline-month-group" data-month="abril-2026">
+      <button type="button" class="outline-month-toggle" aria-expanded="false">
+        <svg class="outline-month-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+        <span class="outline-month-label">Abril 2026</span>
+        <span class="outline-month-count"></span>
+      </button>
+      <div class="outline-month-items">
+        <a href="#24-abril-2026" class="outline-item" onclick="setOutlineActive(this, 'changelog')">
+          <span class="outline-dot"></span>
+          <span class="outline-label">24 Abril</span>
+        </a>
+        <a href="#17-abril-2026" class="outline-item" onclick="setOutlineActive(this, 'changelog')">
+          <span class="outline-dot"></span>
+          <span class="outline-label">17 Abril</span>
+        </a>
+        <a href="#10-abril-2026" class="outline-item" onclick="setOutlineActive(this, 'changelog')">
+          <span class="outline-dot"></span>
+          <span class="outline-label">10 Abril</span>
+        </a>
+      </div>
+    </div>
+    <div class="outline-month-group" data-month="marzo-2026">
+      <button type="button" class="outline-month-toggle" aria-expanded="false">
+        <svg class="outline-month-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+        <span class="outline-month-label">Marzo 2026</span>
+        <span class="outline-month-count"></span>
+      </button>
+      <div class="outline-month-items">
+        <a href="#27-marzo-2026" class="outline-item" onclick="setOutlineActive(this, 'changelog')">
+          <span class="outline-dot"></span>
+          <span class="outline-label">27 Marzo</span>
+        </a>
+        <a href="#20-marzo-2026" class="outline-item" onclick="setOutlineActive(this, 'changelog')">
+          <span class="outline-dot"></span>
+          <span class="outline-label">20 Marzo</span>
+        </a>
+        <a href="#13-marzo-2026" class="outline-item" onclick="setOutlineActive(this, 'changelog')">
+          <span class="outline-dot"></span>
+          <span class="outline-label">13 Marzo</span>
+        </a>
+        <a href="#06-marzo-2026" class="outline-item" onclick="setOutlineActive(this, 'changelog')">
+          <span class="outline-dot"></span>
+          <span class="outline-label">6 Marzo</span>
+        </a>
+      </div>
+    </div>
   </div>
 </aside>
 
@@ -1457,6 +1599,15 @@
           </div>
         </div>
       </section>
+
+      <!-- Empty state — shown via JS when search yields zero matches -->
+      <div class="search-empty-state" hidden>
+        <div class="search-empty-state-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+        </div>
+        <div class="search-empty-state-title">Sin resultados</div>
+        <div class="search-empty-state-desc">No encontramos nada para «<span class="search-empty-state-query"></span>». Prueba con otras palabras.</div>
+      </div>
     </div>
   </div><!-- end view-tutoriales -->
 
@@ -1548,7 +1699,9 @@
         5️⃣  OUTLINE RAIL (sub-nav derecho)
             También hay que agregar el item correspondiente en el rail
             de la derecha (busca aside id="outline-changelog"). Si es un
-            mes nuevo, agregar también el separador div class="outline-month".
+            mes nuevo, agregar el bloque completo <div class="outline-month-group"
+            data-month="MES-YYYY"> con su toggle button + items container.
+            El conteo de releases del mes se calcula solo via JS.
 
         6️⃣  EMOJIS DE FEATURES
             Elegir según funcionalidad, NO plataforma. NO repetir el mismo
@@ -1560,6 +1713,80 @@
               🚚 Logística · ⚙️ Configuración · ✍️ Firma · 📍 Ubicación
         ═══════════════════════════════════════════════════════════════════════
       -->
+
+      <!-- RELEASE: 15 Mayo 2026 -->
+      <div class="release-section" id="15-mayo-2026">
+        <div class="release-header">
+          <div class="release-date">
+            <span class="release-date-month">Mayo</span>
+            <span class="release-date-day">15</span>
+            <span class="release-date-year">2026</span>
+          </div>
+          <div class="release-meta">
+            <span class="release-meta-title">Release semanal</span>
+            <span class="release-meta-sub">2 actualizaciones nuevas</span>
+          </div>
+          <button class="pdf-btn" onclick="printRelease('15-mayo-2026')"><svg width="11" height="11" viewBox="0 0 14 14" fill="none"><path d="M7 1.5v6.5m0 0L4.2 5.2M7 8l2.8-2.8M2.5 10.5v1a1 1 0 001 1h7a1 1 0 001-1v-1" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>PDF</button>
+        </div>
+        <div class="feature-card" style="animation-delay:0.00s">
+          <div class="feature-icon icon-web">👥</div>
+          <div class="feature-body">
+            <div class="feature-header"><span class="feature-title">Directorio: el flujo completo para dar de baja a un usuario</span><div class="feature-tags"><span class="tag tag-teal">Web</span></div></div>
+            <p class="feature-desc">¿Un empleado se fue de tu organización? Desactiva su cuenta en un click — MiChamba cierra su sesión, bloquea el login y suspende sus notificaciones. En el camino te muestra sus tareas pendientes para que las reasignes, y te pregunta qué hacer con las recurrencias futuras. Su historial queda intacto. Sin tareas huérfanas, sin cabos sueltos.</p>
+          </div>
+        </div>
+        <div class="feature-card" style="animation-delay:0.07s">
+          <div class="feature-icon icon-web">⚙️</div>
+          <div class="feature-body">
+            <div class="feature-header"><span class="feature-title">Equipos: eliminación con vista previa de tareas afectadas</span><div class="feature-tags"><span class="tag tag-teal">Web</span></div></div>
+            <p class="feature-desc">Cierra el ciclo de gestión de equipos: ahora puedes eliminar uno desde el directorio. Antes de confirmar, MiChamba te muestra todas las tareas que estaban asignadas a ese equipo — sin sorpresas ni cambios silenciosos.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- RELEASE: 8 Mayo 2026 -->
+      <div class="release-section" id="08-mayo-2026">
+        <div class="release-header">
+          <div class="release-date">
+            <span class="release-date-month">Mayo</span>
+            <span class="release-date-day">08</span>
+            <span class="release-date-year">2026</span>
+          </div>
+          <div class="release-meta">
+            <span class="release-meta-title">Release semanal</span>
+            <span class="release-meta-sub">4 actualizaciones nuevas</span>
+          </div>
+          <button class="pdf-btn" onclick="printRelease('08-mayo-2026')"><svg width="11" height="11" viewBox="0 0 14 14" fill="none"><path d="M7 1.5v6.5m0 0L4.2 5.2M7 8l2.8-2.8M2.5 10.5v1a1 1 0 001 1h7a1 1 0 001-1v-1" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>PDF</button>
+        </div>
+        <div class="feature-card" style="animation-delay:0.00s">
+          <div class="feature-icon icon-web">🎨</div>
+          <div class="feature-body">
+            <div class="feature-header"><span class="feature-title">Página de inicio: nuevo diseño + métricas en tiempo real</span><div class="feature-tags"><span class="tag tag-teal">Web</span></div></div>
+            <p class="feature-desc">Renovamos por completo tu página de inicio: nuevo widget de métricas con todo lo importante del día (atrasadas, pendientes, asignadas hoy), sidebar colapsable y exportación a Excel directo desde el home. La salud de tu operación al primer vistazo.</p>
+          </div>
+        </div>
+        <div class="feature-card" style="animation-delay:0.07s">
+          <div class="feature-icon icon-web">☁️</div>
+          <div class="feature-body">
+            <div class="feature-header"><span class="feature-title">Nube: todos los archivos de tus tareas, en un solo lugar</span><div class="feature-tags"><span class="tag tag-teal">Web</span></div></div>
+            <p class="feature-desc">Cada foto, PDF o Excel que se sube a una tarea — desde WhatsApp o desde la web — ahora vive en un solo lugar. Filtra por tipo, fecha, tarea o subcarpeta y encuentra lo que buscas sin entrar tarea por tarea.</p>
+          </div>
+        </div>
+        <div class="feature-card" style="animation-delay:0.14s">
+          <div class="feature-icon icon-web">👥</div>
+          <div class="feature-body">
+            <div class="feature-header"><span class="feature-title">Equipos: ahora puedes asignar equipos completos a tareas</span><div class="feature-tags"><span class="tag tag-teal">Web</span></div></div>
+            <p class="feature-desc">¿Tarea para un equipo entero? Selecciónalo del dropdown de asignados y los 5, 10 o los que sean reciben notificación al instante. Adiós a agregar miembro por miembro.</p>
+          </div>
+        </div>
+        <div class="feature-card" style="animation-delay:0.21s">
+          <div class="feature-icon icon-web">📊</div>
+          <div class="feature-body">
+            <div class="feature-header"><span class="feature-title">PDF de subcarpetas: visibilidad de tareas no iniciadas</span><div class="feature-tags"><span class="tag tag-teal">Web</span></div></div>
+            <p class="feature-desc">Las tareas asignadas que no tuvieron actividad se registran como "Tarea no iniciada" en el PDF de subcarpeta. Nada se queda fuera del reporte — lo que se hizo y lo que no, todo a la vista.</p>
+          </div>
+        </div>
+      </div>
 
       <!-- RELEASE: 1 Mayo 2026 -->
       <div class="release-section" id="01-mayo-2026">
@@ -1789,21 +2016,21 @@
         <div class="feature-card" style="animation-delay:0.14s">
           <div class="feature-icon icon-web">📅</div>
           <div class="feature-body">
-            <div class="feature-header"><span class="feature-title">Rango de fechas en MiChamba Home</span><div class="feature-tags"><span class="tag tag-teal">Web</span></div></div>
+            <div class="feature-header"><span class="feature-title">Página de inicio: filtra por rango de fechas</span><div class="feature-tags"><span class="tag tag-teal">Web</span></div></div>
             <p class="feature-desc">Selecciona un rango de fechas personalizado en el panel principal para filtrar y visualizar la información de tu proyecto.</p>
           </div>
         </div>
         <div class="feature-card" style="animation-delay:0.21s">
           <div class="feature-icon icon-web">⚡</div>
           <div class="feature-body">
-            <div class="feature-header"><span class="feature-title">Edición masiva desde la tabla principal de tareas</span><div class="feature-tags"><span class="tag tag-teal">Web</span></div></div>
+            <div class="feature-header"><span class="feature-title">Tareas: edición masiva desde la tabla principal</span><div class="feature-tags"><span class="tag tag-teal">Web</span></div></div>
             <p class="feature-desc">Selecciona múltiples tareas y aplica cambios de forma simultánea: estatus, asignados, fechas y más.</p>
           </div>
         </div>
         <div class="feature-card" style="animation-delay:0.28s">
           <div class="feature-icon icon-whatsapp">💬</div>
           <div class="feature-body">
-            <div class="feature-header"><span class="feature-title">Etiquetar personas en comentarios (@menciones)</span><div class="feature-tags"><span class="tag tag-teal">Web</span><span class="tag tag-coral">WhatsApp</span></div></div>
+            <div class="feature-header"><span class="feature-title">Tareas: etiqueta personas en comentarios con @menciones</span><div class="feature-tags"><span class="tag tag-teal">Web</span><span class="tag tag-coral">WhatsApp</span></div></div>
             <p class="feature-desc">Menciona a cualquier miembro de tu organización escribiendo @Nombre en los comentarios de una tarea. La persona etiquetada recibe una notificación in-app y por WhatsApp al instante.</p>
           </div>
         </div>
@@ -1826,14 +2053,14 @@
         <div class="feature-card" style="animation-delay:0.00s">
           <div class="feature-icon icon-web">🎨</div>
           <div class="feature-body">
-            <div class="feature-header"><span class="feature-title">Cambio de colores en estatus de tareas</span><div class="feature-tags"><span class="tag tag-teal">Web</span></div></div>
+            <div class="feature-header"><span class="feature-title">Tareas: nuevos colores en los estatus</span><div class="feature-tags"><span class="tag tag-teal">Web</span></div></div>
             <p class="feature-desc">Los colores de los estatus de tarea han sido actualizados para mejorar la legibilidad y claridad visual.</p>
           </div>
         </div>
         <div class="feature-card" style="animation-delay:0.07s">
           <div class="feature-icon icon-web">👥</div>
           <div class="feature-body">
-            <div class="feature-header"><span class="feature-title">Panel de usuarios: crear y editar usuarios activos</span><div class="feature-tags"><span class="tag tag-teal">Web</span></div></div>
+            <div class="feature-header"><span class="feature-title">Directorio: crea y edita usuarios activos</span><div class="feature-tags"><span class="tag tag-teal">Web</span></div></div>
             <p class="feature-desc">Los administradores pueden agregar nuevos usuarios y editar la información de los existentes desde el directorio.</p>
           </div>
         </div>
@@ -1863,21 +2090,21 @@
         <div class="feature-card" style="animation-delay:0.00s">
           <div class="feature-icon icon-web">🔔</div>
           <div class="feature-body">
-            <div class="feature-header"><span class="feature-title">Configuración de notificaciones por evento en subcarpetas</span><div class="feature-tags"><span class="tag tag-teal">Web</span></div></div>
+            <div class="feature-header"><span class="feature-title">Subcarpetas: configura qué eventos generan notificaciones</span><div class="feature-tags"><span class="tag tag-teal">Web</span></div></div>
             <p class="feature-desc">Los administradores pueden configurar qué eventos dentro de cada subcarpeta generan notificaciones en la app móvil.</p>
           </div>
         </div>
         <div class="feature-card" style="animation-delay:0.07s">
           <div class="feature-icon icon-web">📅</div>
           <div class="feature-body">
-            <div class="feature-header"><span class="feature-title">Tareas recurrentes visibles en el calendario</span><div class="feature-tags"><span class="tag tag-teal">Web</span></div></div>
+            <div class="feature-header"><span class="feature-title">Calendario: ahora muestra tareas recurrentes</span><div class="feature-tags"><span class="tag tag-teal">Web</span></div></div>
             <p class="feature-desc">Las tareas recurrentes ahora se muestran correctamente dentro de la vista de calendario.</p>
           </div>
         </div>
         <div class="feature-card" style="animation-delay:0.14s">
           <div class="feature-icon icon-web">⚡</div>
           <div class="feature-body">
-            <div class="feature-header"><span class="feature-title">Tareas recurrentes pueden heredar recordatorios</span><div class="feature-tags"><span class="tag tag-teal">Web</span></div></div>
+            <div class="feature-header"><span class="feature-title">Tareas recurrentes: los recordatorios se heredan a todas las repeticiones</span><div class="feature-tags"><span class="tag tag-teal">Web</span></div></div>
             <p class="feature-desc">Al crear una tarea recurrente, los recordatorios configurados se propagan automáticamente a todas las repeticiones.</p>
           </div>
         </div>
@@ -1900,7 +2127,7 @@
         <div class="feature-card" style="animation-delay:0.00s">
           <div class="feature-icon icon-web">🔍</div>
           <div class="feature-body">
-            <div class="feature-header"><span class="feature-title">Filtro de tags en vista de tareas</span><div class="feature-tags"><span class="tag tag-teal">Web</span></div></div>
+            <div class="feature-header"><span class="feature-title">Tareas: filtra por etiquetas</span><div class="feature-tags"><span class="tag tag-teal">Web</span></div></div>
             <p class="feature-desc">Filtra tareas por etiquetas directamente desde la vista principal para encontrar lo que necesitas más rápido.</p>
           </div>
         </div>
@@ -1914,10 +2141,19 @@
         <div class="feature-card" style="animation-delay:0.14s">
           <div class="feature-icon icon-web">🔔</div>
           <div class="feature-body">
-            <div class="feature-header"><span class="feature-title">Etiqueta visual: Tarea Atrasada</span><div class="feature-tags"><span class="tag tag-teal">Web</span></div></div>
+            <div class="feature-header"><span class="feature-title">Tareas: nueva etiqueta visual de Tarea Atrasada</span><div class="feature-tags"><span class="tag tag-teal">Web</span></div></div>
             <p class="feature-desc">Las tareas con fecha vencida ahora se identifican automáticamente con una etiqueta de "Atrasada".</p>
           </div>
         </div>
+      </div>
+
+      <!-- Empty state — shown via JS when search yields zero matches -->
+      <div class="search-empty-state" hidden>
+        <div class="search-empty-state-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+        </div>
+        <div class="search-empty-state-title">Sin resultados</div>
+        <div class="search-empty-state-desc">No encontramos ninguna mejora con «<span class="search-empty-state-query"></span>». Prueba con otras palabras.</div>
       </div>
 
     </div>
@@ -2035,6 +2271,115 @@
     el.classList.add('active');
   }
 
+  // ── COLLAPSIBLE MONTHS (changelog outline rail) ──
+  // Each .outline-month-group can be expanded or collapsed independently.
+  // Default state on load: only the current month is expanded.
+  // - Manual click: toggles a single month (independent of others).
+  // - Deep-link: target release's month is expanded, all others collapsed.
+  // - Search: expands all months temporarily, restores default when cleared.
+  const SPANISH_MONTH_NAMES = ['enero','febrero','marzo','abril','mayo','junio','julio','agosto','septiembre','octubre','noviembre','diciembre'];
+
+  function getCurrentMonthSlug() {
+    const today = new Date();
+    return SPANISH_MONTH_NAMES[today.getMonth()] + '-' + today.getFullYear();
+  }
+
+  function getMonthSlugFromReleaseId(releaseId) {
+    // "15-mayo-2026" → "mayo-2026"
+    const match = releaseId.match(/^\d+-(.+)$/);
+    return match ? match[1] : null;
+  }
+
+  function setMonthGroupExpanded(group, expanded) {
+    group.classList.toggle('expanded', expanded);
+    const toggle = group.querySelector('.outline-month-toggle');
+    if (toggle) toggle.setAttribute('aria-expanded', expanded ? 'true' : 'false');
+
+    // Set max-height inline to the actual content height (scrollHeight).
+    // This makes the animation use its full duration in the visible range,
+    // instead of the "stuck-then-snap" feel of a fixed large max-height.
+    // The .expanded class is applied FIRST so padding-top: 4px is already
+    // in effect when scrollHeight is read (it includes the padding).
+    const items = group.querySelector('.outline-month-items');
+    if (items) {
+      items.style.maxHeight = expanded ? items.scrollHeight + 'px' : '0px';
+    }
+  }
+
+  function expandOnlyMonth(monthSlug) {
+    document.querySelectorAll('#outline-changelog .outline-month-group').forEach(g => {
+      setMonthGroupExpanded(g, g.dataset.month === monthSlug);
+    });
+  }
+
+  // Compute which month corresponds to the release currently at the viewport's
+  // 50% line — same logic the IntersectionObserver uses for scroll-spy. Used
+  // after clearing search to expand the month the user is ACTUALLY looking at
+  // (which may differ from the pre-search month if they scrolled during
+  // search). Without this, clearing can cause a brief flicker where the wrong
+  // month expands and then the scroll-spy corrects it asynchronously.
+  function getCurrentChangelogMonthFromScroll() {
+    const midpoint = window.innerHeight * 0.5;
+    const visibleReleases = document.querySelectorAll('#view-changelog .release-section');
+    for (const release of visibleReleases) {
+      if (release.style.display === 'none') continue;
+      const rect = release.getBoundingClientRect();
+      if (rect.top <= midpoint && rect.bottom >= midpoint) {
+        return getMonthSlugFromReleaseId(release.id);
+      }
+    }
+    return null;
+  }
+
+  function applyDefaultMonthState() {
+    // Default: only current month expanded.
+    // If the current month has no group (e.g. no releases yet), nothing gets expanded.
+    expandOnlyMonth(getCurrentMonthSlug());
+  }
+
+  // Tracks the month that scroll-spy considers "active" (i.e. where the user is
+  // currently looking in the main content). Updated by the IntersectionObserver
+  // below. Also used by the search-clear handler to restore expansion state
+  // to wherever the user actually is, not to the initial "current month" default.
+  let lastActiveChangelogMonth = getCurrentMonthSlug();
+
+  function initMonthGroups() {
+    // 1. Compute feature counts for each month (sum of features across all
+    //    releases in that month — NOT the count of weekly releases)
+    document.querySelectorAll('#outline-changelog .outline-month-group').forEach(g => {
+      const items = g.querySelectorAll('.outline-month-items .outline-item');
+      let featureCount = 0;
+      items.forEach(item => {
+        const href = item.getAttribute('href') || '';
+        const releaseId = href.slice(1); // strip the '#'
+        const releaseSection = document.getElementById(releaseId);
+        if (releaseSection) {
+          featureCount += releaseSection.querySelectorAll('.feature-card').length;
+        }
+      });
+      const countEl = g.querySelector('.outline-month-count');
+      if (countEl) countEl.textContent = featureCount;
+    });
+
+    // 2. Wire up click handlers on each month toggle button
+    document.querySelectorAll('#outline-changelog .outline-month-toggle').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const group = btn.closest('.outline-month-group');
+        if (!group) return;
+        setMonthGroupExpanded(group, !group.classList.contains('expanded'));
+      });
+    });
+
+    // 3. Set initial state — only current month expanded
+    applyDefaultMonthState();
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initMonthGroups);
+  } else {
+    initMonthGroups();
+  }
+
   // Scroll-spy for Tutoriales outline
   const modules = document.querySelectorAll('.module');
   const tutorialOutlineItems = document.querySelectorAll('#outline-tutoriales .outline-item');
@@ -2048,10 +2393,16 @@
         });
       }
     });
-  }, { rootMargin: '-80px 0px -65% 0px', threshold: 0 });
+  }, { rootMargin: '-50% 0px -50% 0px', threshold: 0 });
   modules.forEach(m => tutorialObs.observe(m));
 
   // Scroll-spy for Changelog outline
+  // The rootMargin defines a zero-height "trigger line" at 50% from viewport top
+  // (rather than a band). This means only ONE release can intersect at a time —
+  // the one that contains the 50% line. Transitions are clean and symmetric in
+  // both scroll directions, fixing the bug where the previous setup (a 200px
+  // band wider than the 16px gap between releases) caused scroll-up transitions
+  // to get "stuck" because both consecutive releases were intersecting at once.
   const releases = document.querySelectorAll('.release-section');
   const releaseOutlineItems = document.querySelectorAll('#outline-changelog .outline-item');
   const releaseObs = new IntersectionObserver(entries => {
@@ -2062,9 +2413,24 @@
           n.classList.remove('active');
           if (n.getAttribute('href') === '#' + id) n.classList.add('active');
         });
+        // Auto-expand the active release's month group when scroll moves
+        // into a new month. Single-month-expanded model: scrolling out of one
+        // month into another collapses the old and expands the new.
+        // Skipped during search — both the lastActiveChangelogMonth update AND
+        // the expansion are frozen so that clearing the search restores the
+        // user to wherever they were BEFORE searching, not wherever the layout
+        // shift happened to put them during search.
+        const monthSlug = getMonthSlugFromReleaseId(id);
+        if (monthSlug && monthSlug !== lastActiveChangelogMonth) {
+          const searchEl = document.querySelector('#outline-changelog .outline-search');
+          if (!searchEl || !searchEl.classList.contains('has-value')) {
+            lastActiveChangelogMonth = monthSlug;
+            expandOnlyMonth(monthSlug);
+          }
+        }
       }
     });
-  }, { rootMargin: '-80px 0px -65% 0px', threshold: 0 });
+  }, { rootMargin: '-50% 0px -50% 0px', threshold: 0 });
   releases.forEach(r => releaseObs.observe(r));
 
   // ── SEARCH ──
@@ -2078,10 +2444,18 @@
 
     function performSearch() {
       const query = input.value.trim().toLowerCase();
-      searchEl.classList.toggle('has-value', !!query);
+      const wasSearching = searchEl.classList.contains('has-value');
+      const isSearching = !!query;
+      searchEl.classList.toggle('has-value', isSearching);
 
+      // Filter cards inside each parent section. Track how many cards matched
+      // per parent (release/module) — used both to hide empty parents AND, on
+      // the changelog rail, to compute per-month match totals for the badges
+      // and to decide which months to expand/collapse during search.
       const view = document.getElementById(viewId);
       const parents = view.querySelectorAll(parentSelector);
+      const parentMatchCounts = {};
+      let totalMatches = 0;
 
       parents.forEach(parent => {
         const cards = parent.querySelectorAll(cardSelector);
@@ -2095,6 +2469,8 @@
           card.style.display = matches ? '' : 'none';
           if (matches) visibleCount++;
         });
+        totalMatches += visibleCount;
+        if (parent.id) parentMatchCounts[parent.id] = visibleCount;
 
         // Hide parent when search is active and no cards match (also hides modules with 0 videos)
         const hideParent = !!query && visibleCount === 0;
@@ -2107,6 +2483,49 @@
           if (outlineItem) outlineItem.classList.toggle('empty', hideParent);
         }
       });
+
+      // Changelog-specific: update per-month match counts and expand/collapse
+      // months based on whether they have any matches.
+      if (railId === 'outline-changelog') {
+        document.querySelectorAll('#outline-changelog .outline-month-group').forEach(g => {
+          const monthItems = g.querySelectorAll('.outline-month-items .outline-item');
+          let monthMatchCount = 0;
+          monthItems.forEach(item => {
+            const href = item.getAttribute('href') || '';
+            const releaseId = href.slice(1);
+            monthMatchCount += parentMatchCounts[releaseId] || 0;
+          });
+
+          // Update the count badge. When search is cleared (query empty),
+          // monthMatchCount equals the total feature count → badge restores.
+          const countEl = g.querySelector('.outline-month-count');
+          if (countEl) countEl.textContent = monthMatchCount;
+
+          // During active search: expand months with matches, collapse those without.
+          if (isSearching) {
+            setMonthGroupExpanded(g, monthMatchCount > 0);
+          }
+        });
+
+        // When the user clears search, restore expansion to the month they're
+        // ACTUALLY scrolled to right now (which may differ from before search
+        // if they scrolled while searching). Falling back to lastActive avoids
+        // edge cases like scrolling above all releases.
+        if (!isSearching && wasSearching) {
+          const currentMonth = getCurrentChangelogMonthFromScroll() || lastActiveChangelogMonth;
+          lastActiveChangelogMonth = currentMonth;
+          expandOnlyMonth(currentMonth);
+        }
+      }
+
+      // Empty state: shown when search is active and nothing matched anywhere.
+      const emptyState = view.querySelector('.search-empty-state');
+      if (emptyState) {
+        const showEmpty = isSearching && totalMatches === 0;
+        emptyState.hidden = !showEmpty;
+        const queryEl = emptyState.querySelector('.search-empty-state-query');
+        if (queryEl) queryEl.textContent = input.value.trim();
+      }
     }
 
     input.addEventListener('input', performSearch);
@@ -2200,6 +2619,15 @@
       const rail = outlineItem.closest('.outline-rail');
       if (rail) rail.querySelectorAll('.outline-item').forEach(i => i.classList.remove('active'));
       outlineItem.classList.add('active');
+    }
+
+    // Deep-link to a release: expand the target's month group and collapse the rest
+    // (per design: "if it's not the current month, then the current month should be collapsed")
+    if (targetSection === 'changelog' && target.classList.contains('release-section')) {
+      const monthSlug = getMonthSlugFromReleaseId(hash.slice(1));
+      if (monthSlug) {
+        expandOnlyMonth(monthSlug);
+      }
     }
 
     // Jump instantly to the target (no smooth animation — user is arriving, not scrolling)
