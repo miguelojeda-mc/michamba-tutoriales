@@ -1391,6 +1391,19 @@
       7. Los meses son colapsables. Por default solo el mes actual está
          expandido. La lógica de expansión/colapso vive en el JS del archivo.
     -->
+    <div class="outline-month-group" data-month="junio-2026">
+      <button type="button" class="outline-month-toggle" aria-expanded="false">
+        <svg class="outline-month-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+        <span class="outline-month-label">Junio 2026</span>
+        <span class="outline-month-count"></span>
+      </button>
+      <div class="outline-month-items">
+        <a href="#19-junio-2026" class="outline-item" onclick="setOutlineActive(this, 'changelog')">
+          <span class="outline-dot"></span>
+          <span class="outline-label">19 Junio</span>
+        </a>
+      </div>
+    </div>
     <div class="outline-month-group" data-month="mayo-2026">
       <button type="button" class="outline-month-toggle" aria-expanded="false">
         <svg class="outline-month-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
@@ -1721,6 +1734,50 @@
               🚚 Logística · ⚙️ Configuración · ✍️ Firma · 📍 Ubicación
         ═══════════════════════════════════════════════════════════════════════
       -->
+
+      <!-- RELEASE: 19 Junio 2026 -->
+      <div class="release-section" id="19-junio-2026">
+        <div class="release-header">
+          <div class="release-date">
+            <span class="release-date-month">Junio</span>
+            <span class="release-date-day">19</span>
+            <span class="release-date-year">2026</span>
+          </div>
+          <div class="release-meta">
+            <span class="release-meta-title">Release semanal</span>
+            <span class="release-meta-sub">4 actualizaciones nuevas</span>
+          </div>
+          <button class="pdf-btn" onclick="printRelease('19-junio-2026')"><svg width="11" height="11" viewBox="0 0 14 14" fill="none"><path d="M7 1.5v6.5m0 0L4.2 5.2M7 8l2.8-2.8M2.5 10.5v1a1 1 0 001 1h7a1 1 0 001-1v-1" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>PDF</button>
+        </div>
+        <div class="feature-card" style="animation-delay:0.00s">
+          <div class="feature-icon icon-web">🔔</div>
+          <div class="feature-body">
+            <div class="feature-header"><span class="feature-title">Notificaciones: pon tu contador en cero al instante</span><div class="feature-tags"><span class="tag tag-teal">Web</span></div></div>
+            <p class="feature-desc">¿Se te juntaron las notificaciones y ya perdiste el hilo de lo que has visto? El nuevo botón "Marcar todos como leídos" en el panel de Notificaciones te pone al día de un jalón: las no leídas pasan a leídas y la campana regresa a cero al momento. Recuperas el control del panel y dejas que las notificaciones nuevas vuelvan a ser una señal real de lo que importa.</p>
+          </div>
+        </div>
+        <div class="feature-card" style="animation-delay:0.07s">
+          <div class="feature-icon icon-web">📅</div>
+          <div class="feature-body">
+            <div class="feature-header"><span class="feature-title">Tareas recurrentes: elige los días exactos de la semana en que se repiten</span><div class="feature-tags"><span class="tag tag-teal">Web</span></div></div>
+            <p class="feature-desc">Al crear una tarea recurrente ahora eliges exactamente en qué días de la semana se genera. ¿La necesitas solo lunes y sábados? Marca esos días y listo — MiChamba la crea únicamente en los días que seleccionaste, no todos los días del periodo.</p>
+          </div>
+        </div>
+        <div class="feature-card" style="animation-delay:0.14s">
+          <div class="feature-icon icon-web">👤</div>
+          <div class="feature-body">
+            <div class="feature-header"><span class="feature-title">Tareas: el nombre de un usuario desactivado sigue visible en su historial</span><div class="feature-tags"><span class="tag tag-teal">Web</span></div></div>
+            <p class="feature-desc">Antes, al desactivar a un usuario, su nombre desaparecía de las tareas donde había participado y solo quedaba un "N/A". Ahora el nombre se queda visible con la etiqueta "(desactivado)" al lado — tanto en los asignados de la tarea como en el filtro de usuarios del inicio. Mantienes la trazabilidad de quién hizo qué, aunque la persona ya no sea parte del equipo.</p>
+          </div>
+        </div>
+        <div class="feature-card" style="animation-delay:0.21s">
+          <div class="feature-icon icon-web">📎</div>
+          <div class="feature-body">
+            <div class="feature-header"><span class="feature-title">Adjuntos: vista previa visual de PDF, Word, Excel y más</span><div class="feature-tags"><span class="tag tag-teal">Web</span></div></div>
+            <p class="feature-desc">Antes solo las imágenes mostraban vista previa; tus documentos aparecían como un ícono genérico. Ahora los archivos adjuntos que no son imágenes —PDF, Word, Excel, TXT y CSV— muestran una miniatura con la primera página o un preview de su contenido. Reconoces de un vistazo cuál es cuál, sin abrirlos uno por uno.</p>
+          </div>
+        </div>
+      </div>
 
       <!-- RELEASE: 29 Mayo 2026 -->
       <div class="release-section" id="29-mayo-2026">
