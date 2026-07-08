@@ -1391,6 +1391,19 @@
       7. Los meses son colapsables. Por default solo el mes actual está
          expandido. La lógica de expansión/colapso vive en el JS del archivo.
     -->
+    <div class="outline-month-group" data-month="julio-2026">
+      <button type="button" class="outline-month-toggle" aria-expanded="false">
+        <svg class="outline-month-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+        <span class="outline-month-label">Julio 2026</span>
+        <span class="outline-month-count"></span>
+      </button>
+      <div class="outline-month-items">
+        <a href="#03-julio-2026" class="outline-item" onclick="setOutlineActive(this, 'changelog')">
+          <span class="outline-dot"></span>
+          <span class="outline-label">03 Julio</span>
+        </a>
+      </div>
+    </div>
     <div class="outline-month-group" data-month="junio-2026">
       <button type="button" class="outline-month-toggle" aria-expanded="false">
         <svg class="outline-month-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
@@ -1734,6 +1747,29 @@
               🚚 Logística · ⚙️ Configuración · ✍️ Firma · 📍 Ubicación
         ═══════════════════════════════════════════════════════════════════════
       -->
+
+      <!-- RELEASE: 03 Julio 2026 -->
+      <div class="release-section" id="03-julio-2026">
+        <div class="release-header">
+          <div class="release-date">
+            <span class="release-date-month">Julio</span>
+            <span class="release-date-day">03</span>
+            <span class="release-date-year">2026</span>
+          </div>
+          <div class="release-meta">
+            <span class="release-meta-title">Release semanal</span>
+            <span class="release-meta-sub">1 actualización nueva</span>
+          </div>
+          <button class="pdf-btn" onclick="printRelease('03-julio-2026')"><svg width="11" height="11" viewBox="0 0 14 14" fill="none"><path d="M7 1.5v6.5m0 0L4.2 5.2M7 8l2.8-2.8M2.5 10.5v1a1 1 0 001 1h7a1 1 0 001-1v-1" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>PDF</button>
+        </div>
+        <div class="feature-card" style="animation-delay:0.00s">
+          <div class="feature-icon icon-web">✏️</div>
+          <div class="feature-body">
+            <div class="feature-header"><span class="feature-title">Tareas: edición rápida desde el modal, sin abrir otra pantalla</span><div class="feature-tags"><span class="tag tag-teal">Web</span></div><a href="https://www.loom.com/share/0e0398fcd28148cb92d9b040f0b22a16" target="_blank" class="loom-btn"><span class="loom-btn-play"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></span><span class="loom-btn-label">Ver demo</span></a></div>
+            <p class="feature-desc">El modal de tarea dejó de ser solo de lectura. Ahora, desde la misma vista de detalle, cambias el nombre (con edición inline al hacer clic en el título), el estatus, la prioridad y los asignados — cada uno desde su propio dropdown. Menos clics, menos pantallas, y la información siempre al día sin salir del contexto.</p>
+          </div>
+        </div>
+      </div>
 
       <!-- RELEASE: 19 Junio 2026 -->
       <div class="release-section" id="19-junio-2026">
